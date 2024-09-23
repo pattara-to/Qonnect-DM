@@ -76,7 +76,7 @@ const addDevice = async () => {
         alert("Please fill in all required fields.");
         isLoading.value = false; 
     }
-
+    
     try {
         const response = await props.addDevice(deviceData);
         if (response && response.status === 409) {
@@ -84,10 +84,8 @@ const addDevice = async () => {
             isLoading.value = false; 
             return; 
         }
-
-
         resetForm();
-        props.toggleModal();
+        // props.toggleModal();
     } catch (error) {
         console.error("Error adding device:", error);
     } finally {
