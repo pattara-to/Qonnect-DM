@@ -16,29 +16,34 @@ const cancel = () => {
 </script>
 
 <template>
-    <!-- Modal Background -->
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-        <!-- Modal Box -->
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm md:max-w-md text-center space-y-3">
-
-            <!-- Header Section -->
-            <div class="flex justify-between items-center">
-                <h2 class="text-xl font-semibold">{{ confirmMessage }}</h2>
-                <button aria-label="Close" class="text-gray-500 hover:text-gray-700" @click="cancel">
-                    <span class="text-4xl">&times;</span>
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-xl shadow-2xl transform transition-all sm:max-w-lg sm:w-full" role="dialog"
+            aria-modal="true" aria-labelledby="modal-title">
+            <div class="flex justify-end p-2">
+                <button aria-label="Close" class="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                    @click="cancel">
+                    <i class="bi bi-x text-2xl"></i>
                 </button>
             </div>
-            <hr class="border" />
-            <!-- Buttons Section -->
-            <div class="flex justify-center space-x-6 pt-5">
-                <button class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition duration-200"
-                    @click="cancel">
-                    Cancel
-                </button>
-                <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-200"
-                    @click="confirm">
-                    Confirm
-                </button>
+            <div class="px-6 pb-6 text-center">
+                <h2 class="mt-2 text-2xl leading-6 font-semibold text-gray-800" id="modal-title">
+                    {{ confirmMessage }}
+                </h2>
+                <p class="mt-4 text-sm text-gray-500">
+                    Are you sure you want to proceed? This action cannot be undone.
+                </p>
+                <div class="mt-6 flex justify-center space-x-4">
+                    <button
+                        class="px-6 py-2 bg-red-600 text-white rounded-md font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200"
+                        @click="confirm">
+                        Confirm
+                    </button>
+                    <button
+                        class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
+                        @click="cancel">
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     </div>

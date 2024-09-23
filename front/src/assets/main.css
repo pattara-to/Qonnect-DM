@@ -9,6 +9,11 @@
     -webkit-user-drag: none;
     user-select: none;
 }
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 #app {
     width: 100vw;

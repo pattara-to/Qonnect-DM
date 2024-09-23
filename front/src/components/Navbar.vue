@@ -4,36 +4,40 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="nav flex flex-row text-white justify-between items-center px-16">
-    <img src="../assets/QonnectLogoWhite.svg" alt="Qonnect Logo" class="h-2/4" />
+  <div class="bg-[#242A2D] flex h-auto w-full py-1 text-white justify-between items-center px-4 sm:px-8 md:px-16">
+    <img
+      src="../assets/QonnectLogoWhite.svg"
+      alt="Qonnect Logo"
+      class="h-7 my-auto"
+    />
 
-    <div class="w-32 flex flex-row justify-around items-center">
+    <div class="w-full sm:w-32 flex justify-around items-center mb-2">
       <RouterLink :to="{ name: 'devices-view' }">
-        <i 
+        <i
           :class="[
-            'bi', 
-            route.name === 'devices-view' ? 'bi-house-fill' : 'bi-house', 
-            route.name === 'devices-view' ? 'text-white' : 'text-gray-400'
+            'bi',
+            route.name === 'devices-view' ? 'bi-house-fill' : 'bi-house',
+            route.name === 'devices-view' ? 'text-white' : 'text-gray-400',
           ]"
         ></i>
       </RouterLink>
 
       <RouterLink :to="{ name: 'profile-view' }">
-        <i 
+        <i
           :class="[
-            'bi', 
-            route.name === 'profile-view' ? 'bi-person-fill' : 'bi-person', 
-            route.name === 'profile-view' ? 'text-white' : 'text-gray-400'
+            'bi',
+            route.name === 'profile-view' ? 'bi-person-fill' : 'bi-person',
+            route.name === 'profile-view' ? 'text-white' : 'text-gray-400',
           ]"
         ></i>
       </RouterLink>
 
       <RouterLink :to="{ name: 'login-view' }">
-        <i 
+        <i
           :class="[
-            'bi', 
-            route.name === 'login-view' ? 'bi-box-arrow-right-fill' : 'bi-box-arrow-right', 
-            route.name === 'login-view' ? 'text-white' : 'text-gray-400'
+            'bi',
+            route.name === 'login-view' ? 'bi-box-arrow-right-fill' : 'bi-box-arrow-right',
+            route.name === 'login-view' ? 'text-white' : 'text-gray-400',
           ]"
         ></i>
       </RouterLink>
@@ -42,10 +46,6 @@ const route = useRoute();
 </template>
 
 <style scoped>
-.nav {
-  background-color: #242A2D;
-  height: 7%;
-}
 
 i {
   font-size: 24px;
@@ -57,3 +57,4 @@ i:hover {
   color: #ffffffda;
 }
 </style>
+

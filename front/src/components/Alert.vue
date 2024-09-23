@@ -30,46 +30,38 @@ const editAlert = async () => {
 </script>
 
 <template>
-        <div class="flex justify-around items-center mb-2">
-            <div class="flex justify-between w-1/2">
-                <select
-                    v-model="statuses[0]"
-                    class="w-16 h-6 text-center rounded-lg"
-                    :class="statuses[0] == 1 ? 'text-green-500' : 'text-red-500'"
-                >
-                    <option value="0" class="text-red-500">OFF</option>
-                    <option value="1" class="text-green-500">ON</option>
-                </select>
-                <select
-                    v-model="statuses[1]"
-                    class="w-16 h-6 text-center rounded-lg"
-                    :class="statuses[1] == 1 ? 'text-green-500' : 'text-red-500'"
-                >
-                    <option value="0" class="text-red-500">OFF</option>
-                    <option value="1" class="text-green-500">ON</option>
-                </select>
-                <select
-                    v-model="statuses[2]"
-                    class="w-16 h-6 text-center rounded-lg"
-                    :class="statuses[2] == 1 ? 'text-green-500' : 'text-red-500'"
-                >
-                    <option value="0" class="text-red-500">OFF</option>
-                    <option value="1" class="text-green-500">ON</option>
-                </select>
-                <select
-                    v-model="statuses[3]"
-                    class="w-16 h-6 text-center rounded-lg"
-                    :class="statuses[3] == 1 ? 'text-green-500' : 'text-red-500'"
-                >
-                    <option value="0" class="text-red-500">OFF</option>
-                    <option value="1" class="text-green-500">ON</option>
-                </select>
+    <div class="flex flex-wrap w-full h-full justify-around items-center space-y-2 sm:space-y-0">
+        <div class="flex justify-between w-full sm:w-1/2 mb-2 sm:mb-0 px-3">
+            <div class="flex items-center space-x-2 ml-3">
+                <input type="checkbox" id="status-0" :checked="statuses[0] === '1'"
+                    @change="statuses[0] = statuses[0] === '1' ? '0' : '1'"
+                    class="h-6 w-6 rounded-full appearance-none cursor-pointer"
+                    :class="statuses[0] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
             </div>
-            <input type="text" v-model="alert.AlertMessage" class="w-1/4 p-1 pl-2 bg-gray-200 rounded-lg" />
-
-            <div class="text-lg w-16 flex justify-around">
-                <button @click="editAlert()"><i class="bi bi-pencil-square"></i></button>
-                <button @click="props.removeAlert(alert.AlertID)"><i class="bi bi-trash"></i></button>
+            <div class="flex items-center space-x-2">
+                <input type="checkbox" id="status-1" :checked="statuses[1] === '1'"
+                    @change="statuses[1] = statuses[1] === '1' ? '0' : '1'"
+                    class="h-6 w-6 rounded-full appearance-none cursor-pointer"
+                    :class="statuses[1] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
+            </div>
+            <div class="flex items-center space-x-2">
+                <input type="checkbox" id="status-2" :checked="statuses[2] === '1'"
+                    @change="statuses[2] = statuses[2] === '1' ? '0' : '1'"
+                    class="h-6 w-6 rounded-full appearance-none cursor-pointer"
+                    :class="statuses[2] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
+            </div>
+            <div class="flex items-center space-x-2">
+                <input type="checkbox" id="status-3" :checked="statuses[3] === '1'"
+                    @change="statuses[3] = statuses[3] === '1' ? '0' : '1'"
+                    class="h-6 w-6 rounded-full appearance-none cursor-pointer"
+                    :class="statuses[3] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
             </div>
         </div>
+        <input type="text" v-model="props.alert.AlertMessage" class="w-full sm:w-1/4 p-1 pl-2 bg-gray-200 rounded-lg mt-2 sm:mt-0"
+            placeholder="Alert Message" aria-label="Alert Message" />
+        <div class="text-lg w-16 flex justify-around">
+            <button @click="editAlert"><i class="bi bi-pencil-square"></i></button>
+            <button @click="props.removeAlert(props.alert.AlertID)"><i class="bi bi-trash"></i></button>
+        </div>
+    </div>
 </template>

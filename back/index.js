@@ -24,7 +24,7 @@ const initMySQL = async () => {
     conn = await mysql.createConnection({
         host: "localhost",
         user: "root",
-        password: "TestOne",
+        password: "12345678",
         database: "device_manager",
     });
 };
@@ -92,6 +92,7 @@ app.post("/edit-user", async (req, res) => {
     }
 });
 
+
 app.post("/edit-linetoken", async (req, res) => {
     try {
         const { lineToken } = req.body;
@@ -112,7 +113,7 @@ app.get("/devices", async (req, res) => {
             throw { message: "Auth Fail" };
         }
         const [result] = await conn.query(
-            `SELECT DeviceID, Name, devices.MAC, Location, Status, IOStatus, Description FROM devices
+            `SELECT DeviceID, Name, devices.MAC, Location, Status, IOStatus, Description,MachinePic FROM devices
             LEFT JOIN devices_status
             ON devices.MAC = devices_status.MAC
             LEFT JOIN users
@@ -133,18 +134,23 @@ app.get("/device/:id", async (req, res) => {
             throw { message: "Auth Fail" };
         }
         const [result] = await conn.query(
-            `SELECT DeviceID, Name, devices.MAC, Location, 
-            Status, IOStatus, Description FROM devices
-            LEFT JOIN devices_status
-            ON devices.MAC = devices_status.MAC
-            LEFT JOIN users
-            ON devices.UserID = users.id
-            WHERE DeviceID = "${req.params.id}"`
+            `SELECT DeviceID, Name, devices.MAC, Location, MachinePic, 
+                    Status, IOStatus, Description 
+             FROM devices
+             LEFT JOIN devices_status
+               ON devices.MAC = devices_status.MAC
+             LEFT JOIN users
+               ON devices.UserID = users.id
+             WHERE DeviceID = ?`,
+            [req.params.id]
         );
-        res.send(result[0]);
+        if (result.length === 0) {
+            return res.status(404).send("Device not found");
+        }
+        res.json(result[0]);
     } catch (error) {
         console.log("error", error);
-        res.status(401).send("Session Expired");
+        res.status(401).send(error.message || "Session Expired");
     }
 });
 
@@ -152,31 +158,59 @@ app.post("/devices", async (req, res) => {
     try {
         const user = isLogin(req);
         if (!user) {
-            throw { message: "Auth Fail" };
+            return res.status(401).send("Authentication Failed");
         }
-        const { name, MAC, location, role, description } = req.body;
-        await conn.query(
-            `INSERT INTO devices (Name, MAC, Location, Role, Description, UserID) 
-            VALUES ("${name}", "${MAC}", "${location}", "${role}", "${description}", ${user.userID})`
-        );
-        await conn.query("INSERT INTO devices_status (Status, IOStatus, MAC) VALUES (?, ?, ?)", [false, "0000", MAC]);
-        res.send("Insert Device Successfully");
+
+        const { name, MAC, location, description, MachinePic } = req.body;
+        const role = req.body.role || "User"; 
+
+        if (!name || !MAC || !location) {
+            return res.status(400).send("Missing required fields.");
+        }
+        let query = `INSERT INTO devices (Name, MAC, Location, Role, Description, UserID`;
+        let params = [name, MAC, location, role, description, user.userID];
+
+        if (MachinePic) {
+            query += `, MachinePic) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+            params.push(MachinePic);
+        } else {
+            query += `) VALUES (?, ?, ?, ?, ?, ?)`;
+        }
+        await conn.query(query, params);
+        const statusQuery = `INSERT INTO devices_status (Status, IOStatus, MAC) VALUES (?, ?, ?)`;
+        const statusParams = [false, "0000", MAC];
+        await conn.query(statusQuery, statusParams);
+        res.status(201).send("Insert Device Successfully");
     } catch (error) {
-        if (error.code == "ER_DUP_ENTRY") {
-            res.send("Duplicate MAC");
+        if (error.code === "ER_DUP_ENTRY") {
+            return res.status(409).send("Duplicate MAC");
         }
-        console.log("error", error);
+        if (error.message.includes("Missing required fields")) {
+            return res.status(400).send(error.message);
+        }
+        console.error("Error in /devices:", error);
+        res.status(500).send("An internal server error occurred");
     }
 });
 
 app.post("/edit-device/:id", async (req, res) => {
-    const { name, MAC, location, description } = req.body;
-    await conn.query(
-        `UPDATE devices SET Name = "${name}", 
-        MAC = "${MAC}", Description = "${description}", Location = "${location}"
-        WHERE DeviceID = ${req.params.id};`
-    );
-    res.send("Edit Device Successfully");
+    const { name, MAC, location, description, MachinePic } = req.body;
+    const { id } = req.params;
+    try {
+        let query = `UPDATE devices SET Name = ?, MAC = ?, Description = ?, Location = ?`;
+        const params = [name, MAC, description, location];
+        if (MachinePic) {
+            query += `, MachinePic = ?`;
+            params.push(MachinePic);
+        }
+        query += ` WHERE DeviceID = ?;`;
+        params.push(id);
+        await conn.query(query, params);
+        res.send("Edit Device Successfully");
+    } catch (error) {
+        console.error("Error editing device:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 app.post("/remove-device/:id", async (req, res) => {
