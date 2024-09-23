@@ -24,7 +24,7 @@ const initMySQL = async () => {
     conn = await mysql.createConnection({
         host: "localhost",
         user: "root",
-        password: "12345678",
+        password: "TestOne",
         database: "device_manager",
     });
 };
@@ -91,7 +91,6 @@ app.post("/edit-user", async (req, res) => {
         res.status(500).send("An error occurred");
     }
 });
-
 
 app.post("/edit-linetoken", async (req, res) => {
     try {
@@ -162,7 +161,7 @@ app.post("/devices", async (req, res) => {
         }
 
         const { name, MAC, location, description, MachinePic } = req.body;
-        const role = req.body.role || "User"; 
+        const role = req.body.role || "User";
 
         if (!name || !MAC || !location) {
             return res.status(400).send("Missing required fields.");
@@ -214,11 +213,19 @@ app.post("/edit-device/:id", async (req, res) => {
 });
 
 app.post("/remove-device/:id", async (req, res) => {
-    await conn.query(
-        `DELETE FROM devices
-        WHERE DeviceID = ${req.params.id};`
-    );
-    res.send("Remove Device Successfully");
+    try {
+        await conn.query(
+            `DELETE FROM devices_alert
+            WHERE DeviceID = ${req.params.id};`
+        );
+        await conn.query(
+            `DELETE FROM devices
+            WHERE DeviceID = ${req.params.id};`
+        );
+        res.send("Remove Device Successfully");
+    } catch (error) {
+        console.log("error", error);
+    }
 });
 
 app.get("/alerts/:id", async (req, res) => {
