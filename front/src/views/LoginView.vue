@@ -35,6 +35,7 @@ const login = async () => {
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-[#242A2D]">
+    <img src="../assets/moodeng.gif"/>
     <div class="bg-white w-full max-w-xs sm:max-w-sm md:max-w-md p-6 sm:p-8 md:p-9 rounded-xl shadow-md">
       <div class="text-center mb-4 sm:mb-6">
         <img src="../assets/QonnectLogo.svg" alt="Qonnect Logo" class="h-10 sm:h-12 md:h-14 mx-auto" />

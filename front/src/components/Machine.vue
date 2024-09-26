@@ -47,7 +47,8 @@ watch(
       </div>
 
       <div class="flex mt-3">
-        <i class="bi bi-geo-alt-fill text-red-500"></i>
+        <!-- <i class="bi bi-geo-alt-fill text-red-500"></i> -->
+         <img src="../assets/location_icon.svg"/>
         <p class="text-gray-500 font-medium text-base truncate w-fit rounded-lg px-1 mx-1">
           {{ device.Location }}
         </p>

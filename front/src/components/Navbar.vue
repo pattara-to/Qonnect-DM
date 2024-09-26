@@ -4,7 +4,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <div class="bg-[#242A2D] flex h-auto w-full py-1 text-white justify-between items-center px-4 sm:px-6 md:px-10 sticky">
+  <div class="bg-[#242A2D] z-10 flex h-auto w-full py-1 text-white justify-between items-center px-4 sm:px-6 md:px-10 sticky top-0">
     <img src="../assets/QonnectLogoWhite.svg" alt="Qonnect Logo" class="h-7 my-auto" />
     <div class="flex sm:w-32 justify-around items-center mb-2 space-x-2">
       <RouterLink :to="{ name: 'devices-view' }">
