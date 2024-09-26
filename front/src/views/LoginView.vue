@@ -7,75 +7,74 @@ const router = useRouter();
 const deviceStore = useDeviceStore();
 
 const userData = reactive({
-  email: "",
-  password: "",
+    email: "",
+    password: "",
 });
 
-const loginError = ref(""); 
+const loginError = ref("");
 
 const login = async () => {
-  loginError.value = ""; 
-  if (userData.email === "" || userData.password === "") {
-    loginError.value = "Both email and password are required.";
-    return;
-  }
-
-  try {
-    const res = await deviceStore.login(userData);
-    if (res.isOk) {
-      router.push({ name: "devices-view" });
-    } else {
-      loginError.value = "Login failed. Please check your credentials.";
+    loginError.value = "";
+    if (userData.email === "" || userData.password === "") {
+        loginError.value = "Both email and password are required.";
+        return;
     }
-  } catch (error) {
-    loginError.value = "Email or Password is wrong.";
-  }
+
+    try {
+        const res = await deviceStore.login(userData);
+        if (res.isOk) {
+            router.push({ name: "devices-view" });
+        } else {
+            loginError.value = "Login failed. Please check your credentials.";
+        }
+    } catch (error) {
+        loginError.value = "Email or Password is wrong.";
+    }
 };
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-[#242A2D]">
-    <img src="../assets/moodeng.gif"/>
-    <div class="bg-white w-full max-w-xs sm:max-w-sm md:max-w-md p-6 sm:p-8 md:p-9 rounded-xl shadow-md">
-      <div class="text-center mb-4 sm:mb-6">
-        <img src="../assets/QonnectLogo.svg" alt="Qonnect Logo" class="h-10 sm:h-12 md:h-14 mx-auto" />
-      </div>
-      
-      <div class="mb-3 sm:mb-4">
-        <label for="email" class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Email</label>
-        <input 
-          type="email" 
-          id="email" 
-          v-model="userData.email" 
-          class="bg-gray-100 border border-gray-300 rounded-lg w-full h-10 p-3 sm:p-4 text-gray-700 focus:outline-none focus:border-blue-500" 
-          placeholder="Enter your email"
-          @keyup.enter="login"
-        />
-      </div>
-      
-      <div class="mb-4 sm:mb-6">
-        <label for="password" class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Password</label>
-        <input 
-          type="password" 
-          id="password" 
-          v-model="userData.password" 
-          class="bg-gray-100 border border-gray-300 rounded-lg w-full h-10 p-3 sm:p-4 text-gray-700 focus:outline-none focus:border-blue-500" 
-          placeholder="Enter your password"
-          @keyup.enter="login"
-        />
-      </div>
+    <div class="min-h-screen flex items-center justify-center bg-[url('../assets/line.gif')] bg-no-repeat bg-cover">
+        <!-- <img src="../assets/moodeng.gif" /> -->
+        <div class="bg-white w-full max-w-xs sm:max-w-sm md:max-w-md p-6 sm:p-8 md:p-9 rounded-xl shadow-md">
+            <div class="text-center mb-4 sm:mb-6">
+                <img src="../assets/QonnectLogo.svg" alt="Qonnect Logo" class="h-10 sm:h-12 md:h-14 mx-auto" />
+            </div>
 
-      <div v-if="loginError" class="text-red-500 text-sm mb-3 sm:mb-4 text-center">
-        {{ loginError }}
-      </div>
+            <div class="mb-3 sm:mb-4">
+                <label for="email" class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    v-model="userData.email"
+                    class="bg-gray-100 border border-gray-300 rounded-lg w-full h-10 p-3 sm:p-4 text-gray-700 focus:outline-none focus:border-blue-500"
+                    placeholder="Enter your email"
+                    @keyup.enter="login"
+                />
+            </div>
 
-      <button 
-        class="bg-blue-600 text-white font-semibold w-full h-10 rounded-lg focus:outline-none transition-all hover:bg-blue-700"
-        @click="login"
-      >
-        Login
-      </button>
+            <div class="mb-4 sm:mb-6">
+                <label for="password" class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    v-model="userData.password"
+                    class="bg-gray-100 border border-gray-300 rounded-lg w-full h-10 p-3 sm:p-4 text-gray-700 focus:outline-none focus:border-blue-500"
+                    placeholder="Enter your password"
+                    @keyup.enter="login"
+                />
+            </div>
+
+            <div v-if="loginError" class="text-red-500 text-sm mb-3 sm:mb-4 text-center">
+                {{ loginError }}
+            </div>
+
+            <button
+                class="bg-blue-600 text-white font-semibold w-full h-10 rounded-lg focus:outline-none transition-all hover:bg-blue-700"
+                @click="login"
+            >
+                Login
+            </button>
+        </div>
     </div>
-  </div>
 </template>
-
