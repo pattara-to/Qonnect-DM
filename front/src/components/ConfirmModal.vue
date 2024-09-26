@@ -1,4 +1,5 @@
 <script setup>
+import alert_icon from '@/assets/alert_icon.svg'
 const props = defineProps({
     toggleAlert: Function,
     confirmMessage: String,
@@ -19,13 +20,18 @@ const cancel = () => {
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-white rounded-xl shadow-2xl transform transition-all sm:max-w-lg sm:w-full" role="dialog"
             aria-modal="true" aria-labelledby="modal-title">
-            <div class="flex justify-end p-2">
-                <button aria-label="Close" class="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+            <div class="flex justify-end pr-3">
+                <button aria-label="Close" class="text-gray-400 hover:text-gray-600 transition-colors duration-200" 
                     @click="cancel">
                     <i class="bi bi-x text-2xl"></i>
                 </button>
             </div>
+            <div class="h-20 text-[5rem] text-red-500 items-center" :aria-label="Close">
+                    <!-- <i class="block bi bi-exclamation-triangle"></i> -->
+                     <img src="../assets/alert_icon.svg" class="block h-full items-center mx-auto"/>
+                </div>
             <div class="px-6 pb-6 text-center">
+                
                 <h2 class="mt-2 text-2xl leading-6 font-semibold text-gray-800" id="modal-title">
                     {{ confirmMessage }}
                 </h2>

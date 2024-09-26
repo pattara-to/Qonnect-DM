@@ -117,7 +117,7 @@ watch(
 </script>
 
 <template>
-    <div class="modal block fixed z-50 w-full h-full bg-black/70" @click="closeModalOnOutsideClick">
+    <div class="modal block fixed  w-full h-full bg-black/70" @click="closeModalOnOutsideClick">
         <transition name="slide">
             <div v-if="props.modalIsOpen"
                 class="modal-content p-6 rounded-lg shadow-lg bg-white fixed right-0 h-[93%] w-[80%] md:w-[25%] flex flex-col items-center overflow-auto transition-all duration-500"
