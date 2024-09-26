@@ -11,7 +11,7 @@ const { isModalVisible, confirmMessage, showConfirm, confirm, cancel } = useConf
 
 const deviceStore = useDeviceStore();
 
-const isLoading = ref(true);  
+const isLoading = ref(true);
 const user = reactive({
     username: "",
     company: "",
@@ -44,8 +44,8 @@ onMounted(async () => {
         profilePic.value = defaultProfilePic;
     } finally {
         setTimeout(() => {
-            isLoading.value = false;  
-        }, 200);  
+            isLoading.value = false;
+        }, 200);
     }
 });
 
@@ -135,9 +135,9 @@ const editLineToken = async () => {
         <Loading />
     </div>
 
-    <div v-else class="flex flex-col w-full h-[90%]">
+    <div v-else class="flex flex-col h-[93%]">
         <div
-            class="flex flex-col mx-4 sm:mx-auto w-full sm:w-3/4 md:w-1/2 my-auto p-4 sm:p-6 bg-white rounded-lg shadow-lg">
+            class="flex flex-col sm:mx-auto h-[90%] my-auto justify-center w-full sm:w-3/4 md:w-1/2 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
             <div>
                 <h2 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-700">
                     My Account
@@ -188,7 +188,8 @@ const editLineToken = async () => {
                     </div>
                 </div>
                 <div class="flex justify-end">
-                    <button class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md"
+                    <button
+                        class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md"
                         @click="editUser" aria-label="Edit User Information">
                         Edit
                     </button>
@@ -209,7 +210,8 @@ const editLineToken = async () => {
                     </div>
                 </div>
                 <div class="flex justify-end">
-                    <button class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md"
+                    <button
+                        class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md"
                         @click="editLineToken" aria-label="Save Line Token">
                         Save
                     </button>

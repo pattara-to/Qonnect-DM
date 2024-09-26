@@ -78,8 +78,6 @@ const handleAddDevice = async () => {
         
         if (response == 'Duplicate MAC') {
             duplicateMacError.value = true
-            alert("Duplicate MAC Address. Please try another.");
-        } else {
             duplicateMacError.value = false
             props.toggleModal();
         }
