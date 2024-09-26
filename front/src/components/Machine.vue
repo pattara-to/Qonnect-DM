@@ -46,10 +46,10 @@ watch(
         <span>{{ device.Status ? 'Connected' : 'Disconnected' }}</span>
       </div>
 
-      <div class="flex mt-3">
+      <div class="flex mt-3 w-1/2">
         <!-- <i class="bi bi-geo-alt-fill text-red-500"></i> -->
          <img src="../assets/location_icon.svg"/>
-        <p class="text-gray-500 font-medium text-base truncate w-fit rounded-lg px-1 mx-1">
+        <p class="text-gray-500 font-medium text-base truncate rounded-lg px-1 mx-1 w-4/5">
           {{ device.Location }}
         </p>
       </div>
@@ -58,7 +58,7 @@ watch(
         <img :src="machinePic" alt="machine" class="w-20 h-20 rounded-md object-cover" />
       </div>
 
-      <h1 class="mt-3 text-lg font-semibold">{{ device.Name }}</h1>
+      <h1 class="mt-3 text-lg truncate font-semibold w-3/4">{{ device.Name }}</h1>
       <p class="text-gray-400 text-xs">{{ device.MAC }}</p>
 
       <div class="flex justify-between w-full px-8 mt-3 pb-5">

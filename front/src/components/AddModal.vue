@@ -73,15 +73,16 @@ const handleAddDevice = async () => {
     duplicateMacError.value = false
     try {
         const response = await props.addDevice(deviceData);
-        console.log('response',response)
-        
-        
+        console.log('response', response)
+
+
         if (response == 'Duplicate MAC') {
             duplicateMacError.value = true
+        } else {
             duplicateMacError.value = false
             props.toggleModal();
         }
-        console.log('modal',props.modalIsOpen);
+        console.log('modal', props.modalIsOpen);
     } catch (err) {
         console.error("Unexpected error in handleAddDevice:", err);
 
@@ -136,7 +137,7 @@ watch(
                         <label class="font-medium text-gray-700 text-sm" for="machine-name">Machine Name</label>
                         <input id="machine-name" type="text" v-model="deviceData.name"
                             class="bg-gray-100 border border-gray-300 rounded-md py-2 px-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-                            required />
+                            maxlength="30" required />
                     </div>
                     <div class="flex flex-col w-full">
                         <label class="font-medium text-gray-700 text-sm" for="mac-address">MAC Address</label>
@@ -145,7 +146,7 @@ watch(
                             duplicateMacError
                                 ? 'border border-red-500 focus:border-red-500'
                                 : 'border border-gray-300 focus:border-blue-500'
-                        ]" aria-describedby="mac-error" required />
+                        ]" maxlength="20" required />
                         <p v-if="duplicateMacError" id="mac-error" class="text-red-500 text-sm mt-1">
                             This MAC address already exists. Please enter a unique MAC.
                         </p>
@@ -153,18 +154,18 @@ watch(
 
                     <div class="flex flex-col w-full">
                         <label class="font-medium text-gray-700 text-sm" for="description">Description</label>
-                        <textarea id="description" v-model="deviceData.description" rows="3"
+                        <textarea id="description" v-model="deviceData.description" rows="3" maxlength="50"
                             class="bg-gray-100 border border-gray-300 rounded-md py-2 px-2 mt-1 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"></textarea>
                     </div>
                     <div class="flex flex-col w-full">
                         <label class="font-medium text-gray-700 text-sm" for="location">Location</label>
-                        <textarea id="location" v-model="deviceData.location" rows="3"
+                        <textarea id="location" v-model="deviceData.location" rows="3" maxlength="30"
                             class="bg-gray-100 border border-gray-300 rounded-md py-2 px-2 mt-1 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
                             required></textarea>
                     </div>
 
                     <div class="flex justify-end w-full mt-6 space-x-3">
-                        <button type="submit" 
+                        <button type="submit"
                             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center justify-center">
                             <span>Add</span>
                         </button>

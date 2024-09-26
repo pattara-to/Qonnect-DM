@@ -6,6 +6,9 @@ import { useDeviceStore } from "@/stores/device";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import { useConfirm } from "@/stores/useConfirm.js";
 import defaultProfilePic from '@/assets/Ptony2.jpg';
+import { useRoute, useRouter, RouterLink } from "vue-router";
+const route = useRoute();
+const router = useRouter();
 
 const { isModalVisible, confirmMessage, showConfirm, confirm, cancel } = useConfirm();
 
@@ -135,9 +138,20 @@ const editLineToken = async () => {
         <Loading />
     </div>
 
-    <div v-else class="flex flex-col h-[93%]">
+    <div v-else class="flex flex-col h-full">
+        <div class="flex flex-wrap justify-between mt-4 mx-4 sm:mx-8">
+            <span class="self-center text-base sm:text-lg ml-10 py-1">
+                <RouterLink class="hover:text-gray-500" :to="{ name: 'devices-view' }">
+                    Home
+                </RouterLink>
+                >
+                <span class="bg-gray-200 text-violet-700 font-semibold rounded-lg m-1 px-2">
+                    My Account
+                </span>
+            </span>
+        </div>
         <div
-            class="flex flex-col sm:mx-auto h-[90%] my-auto justify-center w-full sm:w-3/4 md:w-1/2 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
+            class="flex flex-col sm:mx-auto h-auto my-auto justify-center w-full sm:w-3/4 md:w-1/2 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
             <div>
                 <h2 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-700">
                     My Account
@@ -159,39 +173,39 @@ const editLineToken = async () => {
                             <label class="block font-semibold mb-1 text-gray-600">Username</label>
                             <input type="text"
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.username" placeholder="Enter your username" aria-label="Username" />
+                                v-model="user.username" placeholder="Enter your username" maxlength="30" />
                         </div>
                         <div>
                             <label class="block font-semibold mb-1 text-gray-600">Company</label>
                             <input type="text"
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.company" placeholder="Enter your company" aria-label="Company" />
+                                v-model="user.company" placeholder="Enter your company" maxlength="30" />
                         </div>
                         <div>
                             <label class="block font-semibold mb-1 text-gray-600">Email</label>
                             <input type="email"
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.email" placeholder="Enter your email" aria-label="Email" />
+                                v-model="user.email" placeholder="Enter your email" maxlength="30" />
                         </div>
                         <div>
                             <label class="block font-semibold mb-1 text-gray-600">Phone</label>
                             <input type="tel"
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.phone" placeholder="Enter your phone number" aria-label="Phone" />
+                                v-model="user.phone" placeholder="Enter your phone number" maxlength="15" />
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block font-semibold mb-1 text-gray-600">Address</label>
                             <input type="text"
                                 class="w-full rounded-md text-sm h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.address" placeholder="Enter your address" aria-label="Address" />
+                                v-model="user.address" placeholder="Enter your address" maxlength="50" />
                         </div>
                     </div>
                 </div>
                 <div class="flex justify-end">
                     <button
-                        class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md"
+                        class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
                         @click="editUser" aria-label="Edit User Information">
-                        Edit
+                        Save
                     </button>
                 </div>
             </div>
@@ -206,12 +220,12 @@ const editLineToken = async () => {
                         <label class="block font-semibold mb-1 text-gray-600">Line Token</label>
                         <input type="text"
                             class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            v-model="user.lineToken" placeholder="Enter your Line token" aria-label="Line Token" />
+                            v-model="user.lineToken" placeholder="Enter your Line token" />
                     </div>
                 </div>
                 <div class="flex justify-end">
                     <button
-                        class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md"
+                        class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
                         @click="editLineToken" aria-label="Save Line Token">
                         Save
                     </button>

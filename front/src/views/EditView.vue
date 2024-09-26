@@ -207,6 +207,7 @@ const toggleAlert = () => {
             </span>
         </div>
 
+
         <div class="w-full sm:w-4/5 h-auto transition-all duration-300 mx-auto mt-3">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                 <div class="relative flex flex-col justify-center items-center">
@@ -226,14 +227,14 @@ const toggleAlert = () => {
                                 <label class="text-gray-600 block font-semibold mb-1">Machine Name</label>
                                 <input type="text" v-model="device.name"
                                     class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    aria-label="Machine Name" />
+                                    maxlength="30" />
                             </div>
 
                             <div>
                                 <label class="text-gray-600 block font-semibold mb-1">MAC</label>
                                 <input type="text" v-model="device.MAC"
                                     class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    aria-label="MAC Address" />
+                                    maxlength="20" />
                             </div>
                         </div>
 
@@ -241,14 +242,14 @@ const toggleAlert = () => {
                             <label class="text-gray-600 block font-semibold mb-1">Description</label>
                             <input type="text" v-model="device.description"
                                 class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                aria-label="Description" />
+                                maxlength="50" />
                         </div>
 
                         <div>
                             <label class="text-gray-600 block font-semibold mb-1">Location</label>
                             <input type="text" v-model="device.location"
                                 class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                aria-label="Location" />
+                                maxlength="50" />
                         </div>
                         <div class="flex flex-wrap items-center gap-4 mt-4">
                             <span class="font-semibold text-gray-600">Status : </span>
@@ -259,9 +260,9 @@ const toggleAlert = () => {
                             </span>
                             <div class="ml-auto space-x-1 mt-2 sm:mt-0">
                                 <button
-                                    class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md"
+                                    class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
                                     @click="editDevice" aria-label="Save Changes">
-                                    Edit
+                                    Save
                                 </button>
                                 <button
                                     class="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-300 shadow-md"
