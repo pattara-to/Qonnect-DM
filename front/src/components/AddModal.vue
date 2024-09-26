@@ -70,24 +70,20 @@ const handleMachinePicChange = (event) => {
 
 
 const handleAddDevice = async () => {
-  try {
-    const response = await props.addDevice(deviceData);
-    console.log('====================================');
-    console.log(response);
-    console.log('====================================');
-    console.log("Response from API:", response);
-    if (response.status === 201) {
-      alert("Device added successfully!");
-      props.toggleModal();
-    } else if (response.status === 409) {
-      alert("Duplicate MAC Address. Please try another.");
-    } else {
-      alert("An error occurred. Status: " + response.status);
+    duplicateMacError.value = false
+    try {
+        const response = await props.addDevice(deviceData);
+        if (response == 'Duplicate MAC') {
+            alert("Duplicate MAC Address. Please try another.");
+            duplicateMacError.value = true
+        } else {
+            duplicateMacError.value = false
+            props.toggleModal();
+        }
+    } catch (err) {
+        console.error("Unexpected error in handleAddDevice:", err);
+
     }
-  } catch (err) {
-    console.error("Unexpected error in handleAddDevice:", err);
-    alert("งง");
-  }
 };
 
 
@@ -148,7 +144,7 @@ watch(
                                 ? 'border border-red-500 focus:border-red-500'
                                 : 'border border-gray-300 focus:border-blue-500'
                         ]" aria-describedby="mac-error" required />
-                        <p v-if="duplicateMacError" id="mac-error" class="text-red-500 text-sm mt-1" role="alert">
+                        <p v-if="duplicateMacError" id="mac-error" class="text-red-500 text-sm mt-1">
                             This MAC address already exists. Please enter a unique MAC.
                         </p>
                     </div>
@@ -166,7 +162,7 @@ watch(
                     </div>
 
                     <div class="flex justify-end w-full mt-6 space-x-3">
-                        <button type="submit"
+                        <button type="submit" 
                             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center justify-center">
                             <span>Add</span>
                         </button>

@@ -29,9 +29,10 @@ const toggleModal = () => {
 };
 
 const addDevice = async (deviceData) => {
-    deviceStore.addDevice(deviceData);
+    const res = await deviceStore.addDevice(deviceData);
     modalIsOpen.value = false;
     await deviceStore.loadDevices();
+    return res;
 };
 </script>
 <template>
