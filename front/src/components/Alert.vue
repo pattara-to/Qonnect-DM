@@ -60,8 +60,8 @@ const editAlert = async () => {
         <input type="text" v-model="props.alert.AlertMessage" class="w-full sm:w-1/4 p-1 pl-2 bg-gray-200 rounded-lg mt-2 sm:mt-0"
             placeholder="Alert Message" aria-label="Alert Message" />
         <div class="text-lg w-16 flex justify-around">
-            <button @click="editAlert"><i class="bi bi-pencil-square"></i></button>
-            <button @click="props.removeAlert(props.alert.AlertID)"><i class="bi bi-trash"></i></button>
+            <button @click="editAlert"><i class="bi bi-pencil-square text-blue-500 hover:text-blue-400"></i></button>
+            <button @click="props.removeAlert(props.alert.AlertID)"><i class="bi bi-trash-fill text-red-500 hover:text-red-400"></i></button>
         </div>
     </div>
 </template>

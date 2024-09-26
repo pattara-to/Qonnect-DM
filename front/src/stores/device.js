@@ -52,21 +52,16 @@ export const useDeviceStore = defineStore("device", {
     },
     async addDevice(deviceData) {
       const authToken = localStorage.getItem("token");
+
       try {
         const response = await axios.post(`${BASE_URL}/devices`, deviceData, {
-          headers: {
-            authorization: `Bearer ${authToken}`,
-          },
+          headers: { authorization: `Bearer ${authToken}` },
         });
-        console.log("Add Device Success");
-        return response; 
+        console.log("API success:", response);
+        return response.data; 
       } catch (error) {
-        if (error.response && error.response.status === 409) {
-          console.log("Duplicate MAC Address");
-          return { status: 409 }; 
-        }
-        console.log("error", error);
-        throw error; 
+        console.log(response.data);
+        return response.data; 
       }
     },
     async addAlert(alertData) {

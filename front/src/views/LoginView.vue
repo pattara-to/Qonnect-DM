@@ -28,7 +28,7 @@ const login = async () => {
       loginError.value = "Login failed. Please check your credentials.";
     }
   } catch (error) {
-    loginError.value = "An error occurred. Please try again later.";
+    loginError.value = "Email or Password is wrong.";
   }
 };
 </script>

@@ -188,7 +188,7 @@ const editLineToken = async () => {
                     </div>
                 </div>
                 <div class="flex justify-end">
-                    <button class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition shadow-md"
+                    <button class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md"
                         @click="editUser" aria-label="Edit User Information">
                         Edit
                     </button>
@@ -209,7 +209,7 @@ const editLineToken = async () => {
                     </div>
                 </div>
                 <div class="flex justify-end">
-                    <button class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition shadow-md"
+                    <button class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md"
                         @click="editLineToken" aria-label="Save Line Token">
                         Save
                     </button>
