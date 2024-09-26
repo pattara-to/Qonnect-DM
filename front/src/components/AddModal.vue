@@ -73,13 +73,17 @@ const handleAddDevice = async () => {
     duplicateMacError.value = false
     try {
         const response = await props.addDevice(deviceData);
+        console.log('response',response)
+        
+        
         if (response == 'Duplicate MAC') {
-            alert("Duplicate MAC Address. Please try another.");
             duplicateMacError.value = true
+            alert("Duplicate MAC Address. Please try another.");
         } else {
             duplicateMacError.value = false
             props.toggleModal();
         }
+        console.log('modal',props.modalIsOpen);
     } catch (err) {
         console.error("Unexpected error in handleAddDevice:", err);
 
