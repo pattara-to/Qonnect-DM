@@ -49,6 +49,10 @@ onMounted(async () => {
     }
 });
 
+setInterval(async () => {
+    await deviceStore.loadDevice(route.params.id);
+}, 1000);
+
 const setDevice = (selectedDevice) => {
     if (!selectedDevice) {
         console.error("Selected device is undefined or null.");

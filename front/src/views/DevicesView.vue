@@ -22,7 +22,7 @@ onMounted(async () => {
 
 setInterval(async () => {
     await deviceStore.loadDevices();
-}, 10000);
+}, 1000);
 
 const toggleModal = () => {
     modalIsOpen.value = !modalIsOpen.value;
