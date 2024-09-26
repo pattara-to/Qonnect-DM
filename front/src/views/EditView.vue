@@ -324,7 +324,7 @@ const toggleAlert = () => {
                 </button>
             </div>
 
-            <div class="overflow-y-scroll max-h-40 mt-3">
+            <div class="overflow-y-scroll max-h-[15rem] mt-3">
                 <div v-for="(alert, index) in alerts" :key="alert.AlertID"
                     :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
                     class="flex flex-col py-2  border-gray-200">
