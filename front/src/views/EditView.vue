@@ -276,9 +276,9 @@ const toggleAlert = () => {
             </div>
         </div>
 
-        <div class="w-full sm:w-4/5 my-2 mx-auto bg-gray-200 border-2 border-gray-300 rounded-lg text-base transition-all duration-300">
+        <div class="w-full sm:w-4/5 my-2 mx-auto bg-gray-100 border-2 border-gray-200 rounded-lg text-base transition-all duration-300">
             <div
-                class="flex flex-wrap w-full h-full justify-around items-center mb-4 font-semibold text-lg bg-gray-300 p-2 rounded-t-lg">
+                class="flex flex-wrap w-full h-full justify-around items-center mb-4 font-semibold text-lg bg-gray-200 p-2 rounded-t-lg">
                 <div class="flex justify-between w-full sm:w-1/2 mb-2 sm:mb-0">
                     <div class="w-16 text-center">I1</div>
                     <div class="w-16 text-center">I2</div>
@@ -335,7 +335,7 @@ const toggleAlert = () => {
             <div class="overflow-y-scroll h-[15rem] mt-3">
                 <div v-for="(alert, index) in alerts" :key="alert.AlertID" class="flex flex-col">
                     <!-- <div class=""><hr class="py-2"></div> -->
-                    <Alert class="border-gray-300 border-t-[2px] py-3" :alert="alert" :editAlert="editAlertHandler"
+                    <Alert class="border-gray-200 border-t-[2px] py-3" :alert="alert" :editAlert="editAlertHandler"
                         :removeAlert="removeAlert" />
                 </div>
             </div>

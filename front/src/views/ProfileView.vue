@@ -138,7 +138,7 @@ const editLineToken = async () => {
         <Loading />
     </div>
 
-    <div v-else class="flex flex-col h-full">
+    <div v-else class="flex flex-col h-[90%]">
         <div class="flex flex-wrap justify-between mt-4 mx-4 sm:mx-8">
             <span class="self-center text-base sm:text-lg ml-10 py-1">
                 <RouterLink class="hover:text-gray-500" :to="{ name: 'devices-view' }">
