@@ -57,11 +57,44 @@ const editAlert = async () => {
                     :class="statuses[3] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
             </div>
         </div>
-        <input type="text" v-model="props.alert.AlertMessage" class="w-full sm:w-1/4 p-1 pl-2 bg-gray-200 rounded-lg mt-2 sm:mt-0"
-            placeholder="Alert Message" aria-label="Alert Message" />
+        <input type="text" v-model="props.alert.AlertMessage"
+            class="w-full sm:w-1/4 p-1 pl-2 bg-white border-2 border-gray-300 rounded-lg mt-2 sm:mt-0" placeholder="Alert Message"
+            aria-label="Alert Message" />
         <div class="text-lg w-16 flex justify-around">
             <button @click="editAlert"><img src="../assets/SaveIcon.svg" class="w-5 hover:scale-105"></button>
-            <button @click="props.removeAlert(props.alert.AlertID)"><img src="../assets/DeleteIcon.svg" class="w-5 hover:scale-105"></button>
+            <button @click="props.removeAlert(props.alert.AlertID)"><img src="../assets/DeleteIcon.svg"
+                    class="w-5 hover:scale-105"></button>
         </div>
     </div>
 </template>
+<style scoped>
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid red;
+    border-radius: 9999px;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="checkbox"]:checked {
+    border-color: #22C55E;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    width: 0.8rem;
+    height: 0.8rem;
+    border: 2px solid #22C55E;
+    background-color: #22C55E;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+</style>

@@ -276,9 +276,9 @@ const toggleAlert = () => {
             </div>
         </div>
 
-        <div class="w-full sm:w-4/5 my-2 mx-auto bg-slate-50 rounded-lg text-base transition-all duration-300">
+        <div class="w-full sm:w-4/5 my-2 mx-auto bg-gray-200 border-2 border-gray-300 rounded-lg text-base transition-all duration-300">
             <div
-                class="flex flex-wrap w-full h-full justify-around items-center mb-4 font-semibold text-lg bg-gray-200 p-2 rounded-t-lg">
+                class="flex flex-wrap w-full h-full justify-around items-center mb-4 font-semibold text-lg bg-gray-300 p-2 rounded-t-lg">
                 <div class="flex justify-between w-full sm:w-1/2 mb-2 sm:mb-0">
                     <div class="w-16 text-center">I1</div>
                     <div class="w-16 text-center">I2</div>
@@ -313,10 +313,10 @@ const toggleAlert = () => {
                         <input type="checkbox" id="i4-status" :checked="alert_statuses[3] === '1'"
                             @change="alert_statuses[3] = alert_statuses[3] === '1' ? '0' : '1'"
                             class="h-6 w-6 rounded-full appearance-none cursor-pointer transition-colors duration-300 hover:scale-110"
-                            :class="alert_statuses[3] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" >
+                            :class="alert_statuses[3] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'">
                     </div>
                 </div>
-                <input type="text" class="w-full sm:w-1/4 p-1 pl-2 bg-gray-300 rounded-lg mt-2 sm:mt-0"
+                <input type="text" class="w-full sm:w-1/4 p-1 pl-2 bg-white border-2 border-gray-300 rounded-lg mt-2 sm:mt-0"
                     v-model="alert_message" placeholder="Alert Message" aria-label="Alert Message" />
                 <button
                     class="text-blue-500 border px-2 py-1 rounded-lg border-blue-500 transition-all duration-300 hover:bg-blue-500 hover:text-white mt-2 sm:mt-0"
@@ -335,7 +335,7 @@ const toggleAlert = () => {
             <div class="overflow-y-scroll h-[15rem] mt-3">
                 <div v-for="(alert, index) in alerts" :key="alert.AlertID" class="flex flex-col">
                     <!-- <div class=""><hr class="py-2"></div> -->
-                    <Alert class="border-solid-black border-t-[1px] py-3" :alert="alert" :editAlert="editAlertHandler"
+                    <Alert class="border-gray-300 border-t-[2px] py-3" :alert="alert" :editAlert="editAlertHandler"
                         :removeAlert="removeAlert" />
                 </div>
             </div>
@@ -344,6 +344,67 @@ const toggleAlert = () => {
 </template>
 
 <style scoped>
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid red;
+    border-radius: 9999px;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="checkbox"]:checked {
+    border-color: #22C55E;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    width: 0.8rem;
+    height: 0.8rem;
+    border: 2px solid #22C55E;
+    background-color: #22C55E;
+
+    input[type="checkbox"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 2px solid red;
+        border-radius: 9999px;
+        background-color: transparent;
+        cursor: pointer;
+        position: relative;
+    }
+
+    input[type="checkbox"]:checked {
+        border-color: #22C55E;
+    }
+
+    input[type="checkbox"]:checked::after {
+        content: '';
+        width: 0.8rem;
+        height: 0.8rem;
+        border: 2px solid #22C55E;
+        background-color: #22C55E;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .relative {
     position: relative;
 }
