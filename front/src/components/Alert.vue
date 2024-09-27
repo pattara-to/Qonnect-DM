@@ -35,26 +35,26 @@ const editAlert = async () => {
             <div class="flex items-center space-x-2 ml-3">
                 <input type="checkbox" id="status-0" :checked="statuses[0] === '1'"
                     @change="statuses[0] = statuses[0] === '1' ? '0' : '1'"
-                    class="h-6 w-6 rounded-full appearance-none cursor-pointer border-gray-400 border-[3px]"
+                    class="h-6 w-6 rounded-full appearance-none cursor-pointer hover:scale-110"
                     :class="statuses[0] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
             </div>
             <div class="flex items-center space-x-2">
                 <input type="checkbox" id="status-1" :checked="statuses[1] === '1'"
                     @change="statuses[1] = statuses[1] === '1' ? '0' : '1'"
-                    class="h-6 w-6 rounded-full appearance-none cursor-pointer"
+                    class="h-6 w-6 rounded-full appearance-none cursor-pointer hover:scale-110"
                     :class="statuses[1] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
             </div>
             <div class="flex items-center space-x-2">
                 <input type="checkbox" id="status-2" :checked="statuses[2] === '1'"
                     @change="statuses[2] = statuses[2] === '1' ? '0' : '1'"
-                    class="h-6 w-6 rounded-full appearance-none cursor-pointer"
-                    :class="statuses[2] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
+                    class="h-6 w-6 rounded-full appearance-none cursor-pointer hover:scale-110"
+                    :class="statuses[2] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500 hover:scale-110'" />
             </div>
             <div class="flex items-center space-x-2">
                 <input type="checkbox" id="status-3" :checked="statuses[3] === '1'"
                     @change="statuses[3] = statuses[3] === '1' ? '0' : '1'"
-                    class="h-6 w-6 rounded-full appearance-none cursor-pointer"
-                    :class="statuses[3] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
+                    class="h-6 w-6 rounded-full appearance-none cursor-pointer hover:scale-110"
+                    :class="statuses[3] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500 hover:scale-110'" />
             </div>
         </div>
         <input type="text" v-model="props.alert.AlertMessage"
