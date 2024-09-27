@@ -24,7 +24,7 @@ const initMySQL = async () => {
     conn = await mysql.createConnection({
         host: "localhost",
         user: "root",
-        password: "TestOne",
+        password: "12345678",
         database: "device_manager",
     });
 };
