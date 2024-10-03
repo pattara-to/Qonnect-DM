@@ -131,8 +131,8 @@ const editLineToken = async () => {
 
 <template>
     <Navbar />
-    <ConfirmModal :toggleAlert="toggleAlert" :confirmMessage="confirmMessage" v-show="isModalVisible" @confirm="confirm"
-        @cancel="cancel" />
+    <ConfirmModal :toggleAlert="toggleAlert" :confirmMessage="confirmMessage" :isModalVisible="isModalVisible"
+        v-show="isModalVisible" @confirm="confirm" @cancel="cancel" />
 
     <div v-if="isLoading">
         <Loading />
