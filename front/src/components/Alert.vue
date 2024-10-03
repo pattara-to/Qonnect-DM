@@ -25,8 +25,19 @@ const editAlert = async () => {
         alertStatus: statuses.value.join(""),
         alertMessage: props.alert.AlertMessage,
     };
-    props.editAlert(props.alert.AlertID, alertData);
+
+    try {
+        const response = await props.editAlert(props.alert.AlertID, alertData);
+        if (response === 'Duplicate Alert') {
+            emit('duplicate-alert');
+        } else {
+            emit('alert-updated');
+        }
+    } catch (error) {
+        console.error("Error editing alert:", error);
+    }
 };
+
 </script>
 
 <template>
@@ -58,8 +69,8 @@ const editAlert = async () => {
             </div>
         </div>
         <input type="text" v-model="props.alert.AlertMessage"
-            class="w-full sm:w-1/4 p-1 pl-2 bg-white border-2 border-gray-300 rounded-lg mt-2 sm:mt-0" placeholder="Alert Message"
-            aria-label="Alert Message" />
+            class="w-full sm:w-1/4 p-1 pl-2 bg-white border-2 border-gray-300 rounded-lg mt-2 sm:mt-0"
+            placeholder="Alert Message" aria-label="Alert Message" />
         <div class="text-lg w-16 flex justify-around">
             <button @click="editAlert"><img src="../assets/SaveIcon.svg" class="w-5 hover:scale-105"></button>
             <button @click="props.removeAlert(props.alert.AlertID)"><img src="../assets/DeleteIcon.svg"

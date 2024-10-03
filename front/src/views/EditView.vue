@@ -1,4 +1,3 @@
-<!-- ParentComponent.vue -->
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter, RouterLink } from "vue-router";
@@ -9,12 +8,19 @@ import { useDeviceStore } from "@/stores/device";
 import { useConfirm } from "@/stores/useConfirm.js";
 import defaultMachinePic from "@/assets/machine.png";
 import Loading from "@/components/Loading.vue";
+import AlertModal from "@/components/AlertModal.vue";
 
 const { isModalVisible, confirmMessage, showConfirm, confirm, cancel } = useConfirm();
 const route = useRoute();
 const router = useRouter();
 const deviceStore = useDeviceStore();
 const isLoading = ref(true);
+const modalIsOpen = ref(false);
+const duplicateAlertError = ref(false);
+const errorMessage = ref({
+    message: "",
+    description: ""
+});
 
 const device = reactive({
     name: "",
@@ -49,9 +55,9 @@ onMounted(async () => {
     }
 });
 
-setInterval(async () => {
-    await deviceStore.loadDevice(route.params.id);
-}, 1000);
+// setInterval(async () => {
+//     await deviceStore.loadDevice(route.params.id);
+// }, 1000);
 
 const setDevice = (selectedDevice) => {
     if (!selectedDevice) {
@@ -80,12 +86,26 @@ const addAlert = async () => {
             deviceID: route.params.id,
             MAC: device.MAC,
         };
-        await deviceStore.addAlert(alertData);
-        await deviceStore.loadAlerts(route.params.id);
-        resetAlertForm();
-        alerts.value = deviceStore.alertList;
+        try {
+            const response = await deviceStore.addAlert(alertData);
+            if (response === 'Duplicate Alert') {
+                duplicateAlertError.value = true;
+                handleDuplicateAlert();
+                errorMessage.value.message = "This Alert already exists";
+                errorMessage.value.description = "This Alert already exists. Please enter a another Alert."
+                resetAlertForm();
+            } else {
+                duplicateAlertError.value = false;
+                await deviceStore.loadAlerts(route.params.id);
+                resetAlertForm();
+                alerts.value = deviceStore.alertList;
+            }
+        } catch (error) {
+            console.error("Error adding alert:", error);
+        }
     }
 };
+
 
 const resetAlertForm = () => {
     alert_statuses.value = [0, 0, 0, 0];
@@ -95,14 +115,29 @@ const resetAlertForm = () => {
 const editDevice = async () => {
     const confirmed = await showConfirm("Edit Device?");
     if (confirmed) {
-        await deviceStore.editDevice(route.params.id, device);
-        if (device.MachinePic) {
-            await deviceStore.updateMachinePic(route.params.id, device.MachinePic);
+        try {
+            const response = await deviceStore.editDevice(route.params.id, device);
+            if (response === 'Duplicate Mac') {
+                await deviceStore.loadDevice(route.params.id);
+                setDevice(deviceStore.selectedDevice);
+                duplicateAlertError.value = true;
+                errorMessage.value.message = "This MAC address already exists";
+                errorMessage.value.description = "This MAC address already exists. Please enter a unique MAC."
+                handleDuplicateAlert();
+            } else {
+                duplicateAlertError.value = false;
+                if (device.MachinePic) {
+                    await deviceStore.updateMachinePic(route.params.id, device.MachinePic);
+                }
+                await deviceStore.loadDevice(route.params.id);
+                setDevice(deviceStore.selectedDevice);
+            }
+        } catch (error) {
+            console.error("Error editing device:", error);
         }
-        await deviceStore.loadDevice(route.params.id);
-        setDevice(deviceStore.selectedDevice);
     }
 };
+
 
 const removeDevice = async () => {
     const confirmed = await showConfirm("Remove Device?");
@@ -113,13 +148,28 @@ const removeDevice = async () => {
 };
 
 const editAlertHandler = async (alertID, updatedData) => {
-    const confirmed = await showConfirm("Are you sure you want to edit this alert?");
+    const confirmed = await showConfirm("Edit this alert?");
     if (confirmed) {
-        await deviceStore.editAlert(alertID, updatedData);
-        await deviceStore.loadAlerts(route.params.id);
-        alerts.value = deviceStore.alertList;
+        try {
+            const response = await deviceStore.editAlert(alertID, updatedData);
+            if (response === 'Duplicate Alert') {
+                duplicateAlertError.value = true;
+                handleDuplicateAlert();
+                errorMessage.value.message = "This Alert already exists";
+                errorMessage.value.description = "This Alert already exists. Please enter a another Alert."
+                await deviceStore.loadAlerts(route.params.id);
+                alerts.value = deviceStore.alertList;
+            } else {
+                duplicateAlertError.value = false;
+                await deviceStore.loadAlerts(route.params.id);
+                alerts.value = deviceStore.alertList;
+            }
+        } catch (error) {
+            console.error("Error editing alert:", error);
+        }
     }
 };
+
 
 const removeAlert = async (alertID) => {
     const confirmed = await showConfirm("Remove Alert?");
@@ -182,17 +232,38 @@ const triggerFileInput = () => {
     }
 };
 
-const toggleAlert = () => {
+const toggleModal = () => {
     isModalVisible.value = !isModalVisible.value;
 };
+
+const toggleAlert = () => {
+    modalIsOpen.value = !modalIsOpen.value;
+};
+
+const handleDuplicateAlert = () => {
+    modalIsOpen.value = true;
+    setTimeout(() => {
+        modalIsOpen.value = false;
+    }, 3000);
+};
+
+const handleAlertUpdated = async () => {
+    await deviceStore.loadAlerts(route.params.id);
+    alerts.value = deviceStore.alertList;
+};
+
 </script>
 
 <template>
     <Navbar />
-    <ConfirmModal class="transition duration-300" :toggleAlert="toggleAlert" :confirmMessage="confirmMessage"
+    <ConfirmModal class="transition duration-300" :toggleModal="toggleModal" :confirmMessage="confirmMessage"
         v-show="isModalVisible" @confirm="confirm" @cancel="cancel" />
 
+    <AlertModal v-show="modalIsOpen" :toggleAlert="toggleAlert" :message="errorMessage.message"
+        :description="errorMessage.description" />
+
     <Loading v-if="isLoading" />
+
 
     <div v-else class="flex flex-col h-auto w-auto">
         <div class="flex flex-wrap justify-between mt-4 mx-4 sm:mx-8">
@@ -227,14 +298,14 @@ const toggleAlert = () => {
                                 <label class="text-gray-600 block font-semibold mb-1">Machine Name</label>
                                 <input type="text" v-model="device.name"
                                     class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    maxlength="30" />
+                                    maxlength="30" placeholder="Enter Machine Name" />
                             </div>
 
                             <div>
-                                <label class="text-gray-600 block font-semibold mb-1">MAC</label>
+                                <label class="text-gray-600 block font-semibold mb-1">MAC Address</label>
                                 <input type="text" v-model="device.MAC"
                                     class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    maxlength="20" />
+                                    maxlength="20" placeholder="Enter MAC Address" />
                             </div>
                         </div>
 
@@ -242,14 +313,14 @@ const toggleAlert = () => {
                             <label class="text-gray-600 block font-semibold mb-1">Description</label>
                             <input type="text" v-model="device.description"
                                 class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                maxlength="50" />
+                                maxlength="50" placeholder="Enter Description" />
                         </div>
 
                         <div>
                             <label class="text-gray-600 block font-semibold mb-1">Location</label>
                             <input type="text" v-model="device.location"
                                 class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                maxlength="50" />
+                                maxlength="50" placeholder="Enter Machine Name" />
                         </div>
                         <div class="flex flex-wrap items-center gap-4 mt-4">
                             <span class="font-semibold text-gray-600">Status : </span>
@@ -276,7 +347,8 @@ const toggleAlert = () => {
             </div>
         </div>
 
-        <div class="w-full sm:w-4/5 my-2 mx-auto bg-gray-100 border-2 border-gray-200 rounded-lg text-base transition-all duration-300">
+        <div
+            class="w-full sm:w-4/5 my-2 mx-auto bg-gray-100 border-2 border-gray-200 rounded-lg text-base transition-all duration-300">
             <div
                 class="flex flex-wrap w-full h-full justify-around items-center mb-4 font-semibold text-lg bg-gray-200 p-2 rounded-t-lg">
                 <div class="flex justify-between w-full sm:w-1/2 mb-2 sm:mb-0">
@@ -316,11 +388,12 @@ const toggleAlert = () => {
                             :class="alert_statuses[3] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'">
                     </div>
                 </div>
-                <input type="text" class="w-full sm:w-1/4 p-1 pl-2 bg-white border-2 border-gray-300 rounded-lg mt-2 sm:mt-0"
-                    v-model="alert_message" placeholder="Alert Message" aria-label="Alert Message" />
+                <input type="text"
+                    class="w-full sm:w-1/4 p-1 pl-2 bg-white border-2 border-gray-300 rounded-lg mt-2 sm:mt-0"
+                    v-model="alert_message" placeholder="Alert Message" />
                 <button
                     class="text-blue-500 border px-2 py-1 rounded-lg border-blue-500 transition-all duration-300 hover:bg-blue-500 hover:text-white mt-2 sm:mt-0"
-                    @click="addAlert" aria-label="Add Alert">
+                    @click="addAlert">
                     Add Alert
                 </button>
             </div>
@@ -336,7 +409,8 @@ const toggleAlert = () => {
                 <div v-for="(alert, index) in alerts" :key="alert.AlertID" class="flex flex-col">
                     <!-- <div class=""><hr class="py-2"></div> -->
                     <Alert class="border-gray-200 border-t-[2px] py-3" :alert="alert" :editAlert="editAlertHandler"
-                        :removeAlert="removeAlert" />
+                        :removeAlert="removeAlert" @duplicate-alert="handleDuplicateAlert"
+                        @alert-updated="handleAlertUpdated" />
                 </div>
             </div>
         </div>

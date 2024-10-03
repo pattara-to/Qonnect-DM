@@ -52,12 +52,10 @@ export const useDeviceStore = defineStore("device", {
     },
     async addDevice(deviceData) {
       const authToken = localStorage.getItem("token");
-
       try {
         const response = await axios.post(`${BASE_URL}/devices`, deviceData, {
           headers: { authorization: `Bearer ${authToken}` },
         });
-        console.log("API success:", response);
         return response.data; 
       } catch (error) {
         console.log(response.data);
@@ -73,8 +71,10 @@ export const useDeviceStore = defineStore("device", {
           },
         });
         console.log("Add Alert Success");
+        return response.data; 
       } catch (error) {
-        console.log("error", error);
+        console.log(response.data);
+        return response.data; 
       }
     },
     async editDevice(deviceID, deviceData) {
@@ -83,9 +83,10 @@ export const useDeviceStore = defineStore("device", {
           `${BASE_URL}/edit-device/${deviceID}`,
           deviceData
         );
-        console.log("Edit Device Success");
+        return response.data;
       } catch (error) {
         console.log("error", error);
+        return response.data;
       }
     },
     async editAlert(alertID, alertData) {
@@ -95,8 +96,10 @@ export const useDeviceStore = defineStore("device", {
           alertData
         );
         console.log("Edit Alert Success");
+        return response.data; 
       } catch (error) {
         console.log("error", error);
+        return response.data; 
       }
     },
     async removeDevice(deviceID) {

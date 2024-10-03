@@ -151,7 +151,7 @@ const editLineToken = async () => {
             </span>
         </div>
         <div
-            class="flex flex-col sm:mx-auto h-auto my-auto justify-center w-full sm:w-3/4 md:w-1/2 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
+            class="flex flex-col sm:mx-auto h-auto mt-2 justify-center w-full sm:w-3/4 md:w-1/2 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
             <div>
                 <h2 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-700">
                     My Account

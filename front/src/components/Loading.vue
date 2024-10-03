@@ -16,13 +16,11 @@
   align-items: center;
   justify-content: center;
   height: 93vh; 
-  width: 100vw; 
   overflow: hidden; 
-  background-color: rgba(0, 0, 0, 0.05); /* Light background for the entire container */
 }
 
 .loading-card {
-  background-color: #3b82f6; /* Solid color for the loading card */
+  background-color: #3b82f6; 
   border-radius: 16px; 
   padding: 2rem;
   box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.15); 
@@ -40,7 +38,7 @@
 .spinner-border {
   animation: spin 1s linear infinite;
   border: 6px solid rgba(255, 255, 255, 0.3);
-  border-top: 6px solid #fff; /* White color for the top part of the spinner */
+  border-top: 6px solid #fff;
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -48,6 +46,6 @@
 
 p {
   font-size: 1.25rem;
-  color: #fff; /* White text */
+  color: #fff; 
 }
 </style>
