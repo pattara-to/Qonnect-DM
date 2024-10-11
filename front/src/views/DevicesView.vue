@@ -4,12 +4,20 @@ import Machine from "@/components/Machine.vue";
 import { useDeviceStore } from "@/stores/device";
 import AddModal from "@/components/AddModal.vue";
 import Navbar from "@/components/Navbar.vue";
+import Loading from "@/components/Loading.vue";
 
 const deviceStore = useDeviceStore();
 const modalIsOpen = ref(false);
+const isLoading = ref(true);
 
 onMounted(async () => {
-    await deviceStore.loadDevices();
+    try {
+        await deviceStore.loadDevices();
+    } finally {
+        setTimeout(() => {
+            isLoading.value = false;
+        }, 200);
+    }
 });
 
 setInterval(async () => {
@@ -21,27 +29,27 @@ const toggleModal = () => {
 };
 
 const addDevice = async (deviceData) => {
-    deviceStore.addDevice(deviceData);
-    modalIsOpen.value = false;
+    const res = await deviceStore.addDevice(deviceData);
     await deviceStore.loadDevices();
+    return res;
 };
 </script>
-
 <template>
     <Navbar />
+    <AddModal v-show="modalIsOpen" :toggleModal="toggleModal" :addDevice="addDevice" :modalIsOpen="modalIsOpen" />
+    <Loading v-if="isLoading" />
 
-    <AddModal :toggleModal="toggleModal" :addDevice="addDevice" :modalIsOpen="modalIsOpen" v-show="modalIsOpen" />
-
-    <div class="flex flex-col h-[93%]">
-        <div class="flex justify-between items-center my-6 px-16">
-            <h1 class="text-3xl font-semibold text-gray-800">Devices</h1>
-            <button @click="toggleModal" class="rounded-lg px-6 py-2 text-lg font-medium text-white bg-[#008cba] hover:bg-[#0079a1] transition">
+    <div v-else class="flex flex-col w-full px-12">
+        <div class="flex flex-wrap justify-between items-center my-4">
+            <h1 class="text-xl sm:text-2xl font-semibold text-gray-800">Devices</h1>
+            <button @click="toggleModal" class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition shadow-md">
                 + Add Device
             </button>
         </div>
-
-        <div class="grid grid-cols-6 gap-6 mx-16 mb-6">
-            <Machine :device="device" v-for="device in deviceStore.list" :key="device.id" />
+        <div
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 min-[1920px]:grid-cols-8 gap-2 sm:gap-4 mb-4"
+        >
+            <Machine v-for="device in deviceStore.list" :key="device.id" :device="device" />
         </div>
     </div>
 </template>
