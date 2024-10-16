@@ -1,8 +1,8 @@
 <script setup>
-import alert_icon from '@/assets/alert_icon.svg'
 const props = defineProps({
     toggleAlert: Function,
     confirmMessage: String,
+    isModalVisible: Boolean
 });
 
 const emit = defineEmits(["confirm", "cancel"]);
@@ -17,40 +17,59 @@ const cancel = () => {
 </script>
 
 <template>
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white rounded-xl shadow-2xl transform transition-all sm:max-w-lg sm:w-full" role="dialog"
-            aria-modal="true" aria-labelledby="modal-title">
-            <div class="flex justify-end pr-3">
-                <button aria-label="Close" class="text-gray-400 hover:text-gray-600 transition-colors duration-200" 
-                    @click="cancel">
-                    <i class="bi bi-x text-2xl"></i>
-                </button>
-            </div>
-            <div class="h-20 text-[5rem] text-red-500 items-center" :aria-label="Close">
-                    <!-- <i class="block bi bi-exclamation-triangle"></i> -->
-                     <img src="../assets/alert_icon.svg" class="block h-full items-center mx-auto"/>
-                </div>
-            <div class="px-6 pb-6 text-center">
-                
-                <h2 class="mt-2 text-2xl leading-6 font-semibold text-gray-800" id="modal-title">
-                    {{ confirmMessage }}
-                </h2>
-                <p class="mt-4 text-sm text-gray-500">
-                    Are you sure you want to proceed? This action cannot be undone.
-                </p>
-                <div class="mt-6 flex justify-center space-x-4">
-                    <button
-                        class="px-6 py-2 bg-green-500 text-white rounded-md font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200"
-                        @click="confirm">
-                        Confirm
-                    </button>
-                    <button
-                        class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
+    <transition name="fade">
+        <div v-if="props.isModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white rounded-xl shadow-2xl transform transition-all sm:max-w-lg sm:w-full" role="dialog"
+                aria-modal="true" aria-labelledby="modal-title">
+                <div class="flex justify-end pr-3">
+                    <button aria-label="Close" class="text-gray-400 hover:text-gray-600 transition-colors duration-200"
                         @click="cancel">
-                        Cancel
+                        <i class="bi bi-x text-2xl"></i>
                     </button>
+                </div>
+                <div class="h-20 text-[5rem] text-red-500 items-center" :aria-label="Close">
+                    <!-- <i class="block bi bi-exclamation-triangle"></i> -->
+                    <img src="../assets/alert_icon.svg" class="block h-full items-center mx-auto" />
+                </div>
+                <div class="px-6 pb-6 text-center">
+
+                    <h2 class="mt-2 text-2xl leading-6 font-semibold text-gray-800" id="modal-title">
+                        {{ props.confirmMessage }}
+                    </h2>
+                    <p class="mt-4 text-sm text-gray-500">
+                        Are you sure you want to proceed? This action cannot be undone.
+                    </p>
+                    <div class="mt-6 flex justify-center space-x-4">
+                        <button
+                            class="px-6 py-2 bg-green-500 text-white rounded-md font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200"
+                            @click="confirm">
+                            Confirm
+                        </button>
+                        <button
+                            class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
+                            @click="cancel">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </transition>
 </template>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.2s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+
+.fade-enter-active .fixed,
+.fade-leave-active .fixed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>

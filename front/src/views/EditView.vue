@@ -256,8 +256,8 @@ const handleAlertUpdated = async () => {
 
 <template>
     <Navbar />
-    <ConfirmModal class="transition duration-300" :toggleModal="toggleModal" :confirmMessage="confirmMessage"
-        v-show="isModalVisible" @confirm="confirm" @cancel="cancel" />
+    <ConfirmModal :confirmMessage="confirmMessage" :toggleModal="toggleModal" v-show="isModalVisible" :isModalVisible="isModalVisible" @confirm="confirm"
+        @cancel="cancel" />
 
     <AlertModal v-show="modalIsOpen" :toggleAlert="toggleAlert" :message="errorMessage.message"
         :description="errorMessage.description" />
