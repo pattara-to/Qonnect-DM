@@ -16,7 +16,7 @@ app.use(
     })
 );
 
-const port = 8000;
+const port = 8081;
 const secret = "ptonyisreal";
 
 const pool = mysql.createPool({
@@ -37,6 +37,7 @@ app.post("/register", async (req, res) => {
         `INSERT INTO users (email, password) 
         VALUES ("${email}", "${hash}")`
     );
+    conn.release();
     res.send("Register Successfully");
 });
 
@@ -44,6 +45,7 @@ app.post("/login", async (req, res) => {
     const conn = await pool.getConnection();
     const { email, password } = req.body;
     const [result] = await conn.query("SELECT id, password from users WHERE email = ?", email);
+    conn.release();
     if (result.length == 0) {
         return res.status(400).send("Wrong Email");
     }
@@ -68,6 +70,7 @@ app.get("/user", async (req, res) => {
             throw { message: "Auth Fail" };
         }
         const [result] = await conn.query(`SELECT * FROM users WHERE ID = ${user.userID}`);
+        conn.release();
         res.send(result[0]);
     } catch (error) {
         console.log("error", error);
@@ -90,6 +93,7 @@ app.post("/edit-user", async (req, res) => {
 
         await conn.query(query, params);
         res.send("Edit User Successfully");
+        conn.release();
     } catch (error) {
         console.error("Error in /edit-user:", error);
         res.status(500).send("An error occurred");
@@ -105,6 +109,7 @@ app.post("/edit-linetoken", async (req, res) => {
             throw { message: "Auth Fail" };
         }
         await conn.query("UPDATE users SET LineToken = ? WHERE ID = ?", [lineToken, user.userID]);
+        conn.release();
     } catch (error) {
         console.log("error", error);
     }
@@ -126,6 +131,7 @@ app.get("/devices", async (req, res) => {
             WHERE email = "${user.email}"`
         );
         res.send(result);
+        conn.release();
     } catch (error) {
         console.log("error", error);
         res.status(401).send("Session Expired");
@@ -150,6 +156,7 @@ app.get("/device/:id", async (req, res) => {
              WHERE DeviceID = ?`,
             [req.params.id]
         );
+        conn.release();
         if (result.length === 0) {
             return res.status(404).send("Device not found");
         }
@@ -186,6 +193,7 @@ app.post("/devices", async (req, res) => {
         const statusParams = [false, "0000", MAC];
         await conn.query(statusQuery, statusParams);
         res.status(201).send("Insert Device Successfully");
+        conn.release();
     } catch (error) {
         if (error.code === "ER_DUP_ENTRY") {
             return res.send("Duplicate MAC");
@@ -210,6 +218,7 @@ app.post("/edit-device/:id", async (req, res) => {
         params.push(id);
         await conn.query(query, params);
         res.send("Edit Device Successfully");
+        conn.release();
     } catch (error) {
         console.error("Error editing device:", error);
         console.log("error", error);
@@ -233,6 +242,7 @@ app.post("/remove-device/:id", async (req, res) => {
             WHERE DeviceID = ${req.params.id};`
         );
         res.send("Remove Device Successfully");
+        conn.release();
     } catch (error) {
         console.log("error", error);
     }
@@ -244,6 +254,7 @@ app.get("/alerts/:id", async (req, res) => {
         `SELECT AlertID, AlertStatus, AlertMessage FROM devices_alert
         WHERE DeviceID = ${req.params.id}`
     );
+    conn.release();
     res.send(result);
 });
 
@@ -261,6 +272,7 @@ app.post("/alerts", async (req, res) => {
             [alertStatus, alertMessage, deviceID, MAC, user.userID]
         );
         res.send("Insert Alert Successfully");
+        conn.release();
     } catch (error) {
         console.log("error", error);
         if (error.code === "ER_DUP_ENTRY") {
@@ -281,6 +293,7 @@ app.post("/edit-alert/:id", async (req, res) => {
             WHERE AlertID = ${req.params.id};`
         );
         res.send("Edit Alert Succesfully");
+        conn.release();
     } catch (error) {
         console.log("error", error);
         if (error.code === "ER_DUP_ENTRY") {
@@ -298,6 +311,7 @@ app.post("/remove-alert/:id", async (req, res) => {
         WHERE AlertID = ${req.params.id};`
     );
     res.send("Remove Alert Successfully");
+    conn.release();
 });
 
 app.listen(port, async () => {
