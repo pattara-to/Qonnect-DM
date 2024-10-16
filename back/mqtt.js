@@ -28,60 +28,88 @@ client.on("connect", async () => {
     });
 });
 
-// When a message is received on the subscribed topic
 client.on("message", async (topic, message) => {
-    // message is a Buffer, so convert it to a string
-    console.log(`Received message on topic ${topic}: ${message.toString()}`);
-    const deviceName = topic.split("/")[0];
-    const type = topic.split("/")[1];
-    if (type == "Status") {
-        const MAC = message.toString().split(" ")[1].slice(4, 21);
-        setMAC(deviceName, MAC);
-    } else if (type == "DI") {
-        let IOStatus = "";
-        const io = message.toString().slice(3, 7);
-        for (let i = 0; i < io.length; i++) {
-            if (io[i] == "0") {
-                IOStatus += "1";
-            } else {
-                IOStatus += "0";
-            }
+    try {
+        const messageStr = message.toString();
+        console.log(`Received message on topic ${topic}: ${messageStr}`);
+
+        const [uboxName, type] = topic.split("/");
+
+        if (type === "Status") {
+            const MAC = messageStr.split(" ")[1].slice(4, 21);
+            await handleDeviceStatus(uboxName, MAC);
+        } else if (type === "DI") {
+            const io = messageStr.slice(3, 7);
+            const IOStatus = invertIOStatus(io);
+            await handleIOStatus(uboxName, IOStatus);
         }
-        setIO(deviceName, IOStatus);
+    } catch (err) {
+        console.error(`Error processing message: ${err}`);
     }
 });
 
-// Error handling
 client.on("error", (err) => {
     console.error(`Connection error: ${err}`);
 });
 
-const setIO = async (deviceName, IOStatus) => {
-    [response] = await conn.query(`SELECT MAC FROM devices_status WHERE DeviceName = "${deviceName}"`);
-    if (response.length != 0) {
-        await conn.query(`UPDATE devices_status SET Status = ${1}, IOStatus = "${IOStatus}", LastestTime = NOW()
-        WHERE DeviceName = '${deviceName}'`);
-        await checkIO(response[0].MAC, IOStatus);
-    }
+const invertIOStatus = (io) => {
+    return io
+        .split("")
+        .map((char) => (char === "0" ? "1" : "0"))
+        .join("");
 };
 
-const setMAC = async (deviceName, MAC) => {
-    [response] = await conn.query(`SELECT DeviceName FROM devices_status WHERE DeviceName = "${deviceName}"`);
-    if (response.length == 0) {
-        await conn.query("INSERT INTO devices_status (DeviceName, MAC) VALUES (?,?,?)", [deviceName, MAC]);
-    } else {
-        await conn.query("UPDATE devices_status SET MAC = ? WHERE DeviceName = ?", [MAC, deviceName]);
-    }
-};
+const handleDeviceStatus = async (uboxName, MAC) => {
+    try {
+        const [device] = await conn.query("SELECT UboxName FROM devices_status WHERE UboxName = ?", [uboxName]);
 
-const checkIO = async (MAC, IOStatus) => {
-    [response] = await conn.query("SELECT AlertStatus, AlertMessage, UserID FROM devices_alert WHERE MAC = ?", MAC);
-    response.forEach(async (alert) => {
-        if (alert.AlertStatus == IOStatus) {
-            [res] = await conn.query("SELECT LineToken FROM users WHERE ID = ?", alert.UserID);
-            line.callLineApi(res[0].LineToken, alert.AlertMessage);
+        if (device.length === 0) {
+            await conn.query("INSERT INTO devices_status (UboxName, MAC) VALUES (?, ?)", [uboxName, MAC]);
+        } else {
+            await conn.query("UPDATE devices_status SET MAC = ? WHERE UboxName = ?", [MAC, uboxName]);
         }
-    });
+    } catch (err) {
+        console.error(`Error updating device status: ${err}`);
+    }
+};
+
+const handleIOStatus = async (uboxName, IOStatus) => {
+    try {
+        const [device] = await conn.query("SELECT MAC FROM devices_status WHERE UboxName = ?", [uboxName]);
+
+        if (device.length > 0) {
+            const MAC = device[0].MAC;
+
+            await conn.query(
+                `
+                UPDATE devices_status 
+                SET Status = 1, IOStatus = ?, LastestTime = NOW() 
+                WHERE UboxName = ?`,
+                [IOStatus, uboxName]
+            );
+
+            await checkIOAlerts(MAC, IOStatus);
+        }
+    } catch (err) {
+        console.error(`Error updating IO status: ${err}`);
+    }
+};
+
+const checkIOAlerts = async (MAC, IOStatus) => {
+    try {
+        const [alerts] = await conn.query("SELECT AlertStatus, AlertMessage, UserID FROM devices_alert WHERE MAC = ?", [MAC]);
+
+        for (const alert of alerts) {
+            if (alert.AlertStatus === IOStatus) {
+                const [users] = await conn.query("SELECT LineToken FROM users WHERE ID = ?", [alert.UserID]);
+                if (users.length > 0) {
+                    await line.callLineApi(users[0].LineToken, alert.AlertMessage);
+                }
+            }
+        }
+    } catch (err) {
+        console.error(`Error checking IO alerts: ${err}`);
+    }
 };
 
 const CHECK_INTERVAL = 10000; // Check every 10 seconds
