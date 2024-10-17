@@ -9,7 +9,7 @@ import defaultProfilePic from "@/assets/Ptony2.jpg";
 import { useRoute, useRouter, RouterLink } from "vue-router";
 import ResetPassModal from "@/components/ResetPassModal.vue";
 
-const { isModalVisible, confirmMessage, showConfirm, confirm, cancel } = useConfirm();
+const { isModalVisible, isPasswordVisible, confirmMessage, showConfirm, showPassword, confirm, cancel } = useConfirm();
 
 const deviceStore = useDeviceStore();
 
@@ -102,11 +102,11 @@ const triggerFileInput = () => {
     fileInput.value.click();
 };
 
-const editUser = async () => {
+const editSetting = async () => {
     try {
-        const confirmed = await showConfirm("Edit User information?");
+        const confirmed = await showConfirm("Edit Setting");
         if (confirmed) {
-            console.log("Sending user data:", user);
+            await deviceStore.editLineToken(user);
             await deviceStore.editUser(user);
         }
     } catch (error) {
@@ -126,16 +126,25 @@ const editLineToken = async () => {
     }
 };
 
-const resetPassword = async () => {};
+const resetPassword = async () => {
+    try {
+        const confirmed = await showPassword("Pass?");
+        if (confirmed) {
+            await deviceStore.editLineToken(user);
+            alert("reset pass.");
+        }
+    } catch (error) {
+        alert("no");
+    }
+};
 </script>
 
 <template>
-    <Navbar />
     <ResetPassModal
         :toggleAlert="toggleAlert"
         :confirmMessage="confirmMessage"
-        :isModalVisible="true"
-        v-show="true"
+        :isModalVisible="isPasswordVisible"
+        v-show="isPasswordVisible"
         @confirm="confirm"
         @cancel="cancel"
     />
@@ -218,25 +227,15 @@ const resetPassword = async () => {};
                             />
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="block font-semibold mb-1 text-gray-600">Address</label>
-                            <input
-                                type="text"
-                                class="w-full rounded-md text-sm h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.address"
-                                placeholder="Enter your address"
-                                maxlength="50"
-                            />
+                            <label class="block font-semibold mb-1 text-gray-600">Password</label>
+                            <button
+                                class="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-300 shadow-md"
+                                @click="resetPassword"
+                            >
+                                Reset Password
+                            </button>
                         </div>
                     </div>
-                </div>
-                <div class="flex justify-end">
-                    <button
-                        class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
-                        @click="editUser"
-                        aria-label="Edit User Information"
-                    >
-                        Save
-                    </button>
                 </div>
             </div>
             <div class="mt-8">
@@ -257,7 +256,7 @@ const resetPassword = async () => {};
                 <div class="flex justify-end">
                     <button
                         class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
-                        @click="editLineToken"
+                        @click="editLineToken, editSetting"
                         aria-label="Save Line Token"
                     >
                         Save

@@ -1,4 +1,6 @@
 <script setup>
+import { ref, watch } from "vue";
+
 const props = defineProps({
     toggleAlert: Function,
     confirmMessage: String,
@@ -7,8 +9,22 @@ const props = defineProps({
 
 const emit = defineEmits(["confirm", "cancel"]);
 
+// Reactive states for password inputs
+const password = ref("");
+const confirmPassword = ref("");
+const errorMessage = ref("");
+
+// Form validation and event handling
 const confirm = () => {
-    emit("confirm");
+    if (password.value !== confirmPassword.value) {
+        errorMessage.value = "Passwords do not match";
+        return;
+    }
+    if (!password.value || !confirmPassword.value) {
+        errorMessage.value = "Please enter both passwords";
+        return;
+    }
+    emit("confirm", password.value); // Pass the password along with the event
 };
 
 const cancel = () => {
@@ -18,7 +34,7 @@ const cancel = () => {
 
 <template>
     <transition name="fade">
-        <div v-if="props.isModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div v-if="isModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" @click.self="cancel">
             <div
                 class="bg-white rounded-xl shadow-2xl transform transition-all sm:max-w-lg sm:w-full"
                 role="dialog"
@@ -32,11 +48,21 @@ const cancel = () => {
                 </div>
                 <div class="px-6 pb-6 text-center">
                     <h2 class="mt-2 text-2xl leading-6 font-semibold text-gray-800" id="modal-title">
-                        {{ props.confirmMessage }}
+                        {{ confirmMessage }}
                     </h2>
                     <p class="mt-4 text-sm text-gray-500">Reset Password</p>
-                    <div><input type="text" placeholder="new password" /></div>
-                    <div><input type="text" placeholder="retype password" /></div>
+
+                    <!-- Form inputs for password reset -->
+                    <div class="mt-4">
+                        <input type="password" placeholder="New password" v-model="password" class="w-full p-2 border rounded-md" />
+                    </div>
+                    <div class="mt-4">
+                        <input type="password" placeholder="Retype password" v-model="confirmPassword" class="w-full p-2 border rounded-md" />
+                    </div>
+
+                    <!-- Display error message if passwords do not match -->
+                    <p v-if="errorMessage" class="mt-2 text-sm text-red-500">{{ errorMessage }}</p>
+
                     <div class="mt-6 flex justify-center space-x-4">
                         <button
                             class="px-6 py-2 bg-green-500 text-white rounded-md font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200"

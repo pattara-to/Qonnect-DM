@@ -19,7 +19,7 @@ const modalIsOpen = ref(false);
 const duplicateAlertError = ref(false);
 const errorMessage = ref({
     message: "",
-    description: ""
+    description: "",
 });
 
 const device = reactive({
@@ -88,11 +88,11 @@ const addAlert = async () => {
         };
         try {
             const response = await deviceStore.addAlert(alertData);
-            if (response === 'Duplicate Alert') {
+            if (response === "Duplicate Alert") {
                 duplicateAlertError.value = true;
                 handleDuplicateAlert();
                 errorMessage.value.message = "This Alert already exists";
-                errorMessage.value.description = "This Alert already exists. Please enter a another Alert."
+                errorMessage.value.description = "This Alert already exists. Please enter a another Alert.";
                 resetAlertForm();
             } else {
                 duplicateAlertError.value = false;
@@ -106,7 +106,6 @@ const addAlert = async () => {
     }
 };
 
-
 const resetAlertForm = () => {
     alert_statuses.value = [0, 0, 0, 0];
     alert_message.value = "";
@@ -117,12 +116,12 @@ const editDevice = async () => {
     if (confirmed) {
         try {
             const response = await deviceStore.editDevice(route.params.id, device);
-            if (response === 'Duplicate Mac') {
+            if (response === "Duplicate Mac") {
                 await deviceStore.loadDevice(route.params.id);
                 setDevice(deviceStore.selectedDevice);
                 duplicateAlertError.value = true;
                 errorMessage.value.message = "This MAC address already exists";
-                errorMessage.value.description = "This MAC address already exists. Please enter a unique MAC."
+                errorMessage.value.description = "This MAC address already exists. Please enter a unique MAC.";
                 handleDuplicateAlert();
             } else {
                 duplicateAlertError.value = false;
@@ -138,7 +137,6 @@ const editDevice = async () => {
     }
 };
 
-
 const removeDevice = async () => {
     const confirmed = await showConfirm("Remove Device?");
     if (confirmed) {
@@ -152,11 +150,11 @@ const editAlertHandler = async (alertID, updatedData) => {
     if (confirmed) {
         try {
             const response = await deviceStore.editAlert(alertID, updatedData);
-            if (response === 'Duplicate Alert') {
+            if (response === "Duplicate Alert") {
                 duplicateAlertError.value = true;
                 handleDuplicateAlert();
                 errorMessage.value.message = "This Alert already exists";
-                errorMessage.value.description = "This Alert already exists. Please enter a another Alert."
+                errorMessage.value.description = "This Alert already exists. Please enter a another Alert.";
                 await deviceStore.loadAlerts(route.params.id);
                 alerts.value = deviceStore.alertList;
             } else {
@@ -169,7 +167,6 @@ const editAlertHandler = async (alertID, updatedData) => {
         }
     }
 };
-
 
 const removeAlert = async (alertID) => {
     const confirmed = await showConfirm("Remove Alert?");
@@ -251,26 +248,26 @@ const handleAlertUpdated = async () => {
     await deviceStore.loadAlerts(route.params.id);
     alerts.value = deviceStore.alertList;
 };
-
 </script>
 
 <template>
-    <Navbar />
-    <ConfirmModal :confirmMessage="confirmMessage" :toggleModal="toggleModal" v-show="isModalVisible" :isModalVisible="isModalVisible" @confirm="confirm"
-        @cancel="cancel" />
+    <ConfirmModal
+        :confirmMessage="confirmMessage"
+        :toggleModal="toggleModal"
+        v-show="isModalVisible"
+        :isModalVisible="isModalVisible"
+        @confirm="confirm"
+        @cancel="cancel"
+    />
 
-    <AlertModal v-show="modalIsOpen" :toggleAlert="toggleAlert" :message="errorMessage.message"
-        :description="errorMessage.description" />
+    <AlertModal v-show="modalIsOpen" :toggleAlert="toggleAlert" :message="errorMessage.message" :description="errorMessage.description" />
 
     <Loading v-if="isLoading" />
-
 
     <div v-else class="flex flex-col h-auto w-auto">
         <div class="flex flex-wrap justify-between mt-4 mx-4 sm:mx-8">
             <span class="self-center text-base sm:text-lg ml-10 py-1">
-                <RouterLink class="hover:text-gray-500" :to="{ name: 'devices-view' }">
-                    Devices
-                </RouterLink>
+                <RouterLink class="hover:text-gray-500" :to="{ name: 'devices-view' }"> Devices </RouterLink>
                 >
                 <span class="bg-gray-200 text-violet-700 font-semibold rounded-lg m-1 px-2">
                     {{ device.name }}
@@ -278,14 +275,14 @@ const handleAlertUpdated = async () => {
             </span>
         </div>
 
-
         <div class="w-full sm:w-4/5 h-auto transition-all duration-300 mx-auto mt-3">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                 <div class="relative flex flex-col justify-center items-center">
-                    <img :src="machinePic" class="w-[50%] h-auto max-h-[300px] rounded-md object-cover"
-                        alt="Machine Picture" />
-                    <div class="absolute inset-0 flex w-[50%] h-auto mx-auto items-center justify-center text-white text-xl bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity rounded-md cursor-pointer"
-                        @click="triggerFileInput">
+                    <img :src="machinePic" class="w-[50%] h-auto max-h-[300px] rounded-md object-cover" alt="Machine Picture" />
+                    <div
+                        class="absolute inset-0 flex w-[50%] h-auto mx-auto items-center justify-center text-white text-xl bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity rounded-md cursor-pointer"
+                        @click="triggerFileInput"
+                    >
                         <i class="bi bi-camera"></i>
                     </div>
                     <input ref="fileInput" type="file" accept="image/*" @change="handleImageChange" class="hidden" />
@@ -296,48 +293,68 @@ const handleAlertUpdated = async () => {
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label class="text-gray-600 block font-semibold mb-1">Machine Name</label>
-                                <input type="text" v-model="device.name"
+                                <input
+                                    type="text"
+                                    v-model="device.name"
                                     class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    maxlength="30" placeholder="Enter Machine Name" />
+                                    maxlength="30"
+                                    placeholder="Enter Machine Name"
+                                />
                             </div>
 
                             <div>
                                 <label class="text-gray-600 block font-semibold mb-1">MAC Address</label>
-                                <input type="text" v-model="device.MAC"
+                                <input
+                                    type="text"
+                                    v-model="device.MAC"
                                     class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    maxlength="20" placeholder="Enter MAC Address" />
+                                    maxlength="20"
+                                    placeholder="Enter MAC Address"
+                                    disabled
+                                />
                             </div>
                         </div>
 
                         <div>
                             <label class="text-gray-600 block font-semibold mb-1">Description</label>
-                            <input type="text" v-model="device.description"
+                            <input
+                                type="text"
+                                v-model="device.description"
                                 class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                maxlength="50" placeholder="Enter Description" />
+                                maxlength="50"
+                                placeholder="Enter Description"
+                            />
                         </div>
 
                         <div>
                             <label class="text-gray-600 block font-semibold mb-1">Location</label>
-                            <input type="text" v-model="device.location"
+                            <input
+                                type="text"
+                                v-model="device.location"
                                 class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                maxlength="50" placeholder="Enter Machine Name" />
+                                maxlength="50"
+                                placeholder="Enter Machine Name"
+                            />
                         </div>
                         <div class="flex flex-wrap items-center gap-4 mt-4">
                             <span class="font-semibold text-gray-600">Status : </span>
-                            <div class="w-5 h-5 rounded-full" :class="device.status ? 'bg-green-500' : 'bg-red-500'">
-                            </div>
+                            <div class="w-5 h-5 rounded-full" :class="device.status ? 'bg-green-500' : 'bg-red-500'"></div>
                             <span class="text-lg">
                                 {{ device.status ? "Connected" : "Disconnected" }}
                             </span>
                             <div class="ml-auto space-x-1 mt-2 sm:mt-0">
                                 <button
                                     class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
-                                    @click="editDevice" aria-label="Save Changes">
+                                    @click="editDevice"
+                                    aria-label="Save Changes"
+                                >
                                     Save
                                 </button>
                                 <button
                                     class="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-300 shadow-md"
-                                    @click="removeDevice" aria-label="Delete Device">
+                                    @click="removeDevice"
+                                    aria-label="Delete Device"
+                                >
                                     Delete
                                 </button>
                             </div>
@@ -347,10 +364,8 @@ const handleAlertUpdated = async () => {
             </div>
         </div>
 
-        <div
-            class="w-full sm:w-4/5 my-2 mx-auto bg-gray-100 border-2 border-gray-200 rounded-lg text-base transition-all duration-300">
-            <div
-                class="flex flex-wrap w-full h-full justify-around items-center mb-4 font-semibold text-lg bg-gray-200 p-2 rounded-t-lg">
+        <div class="w-full sm:w-4/5 my-2 mx-auto bg-gray-100 border-2 border-gray-200 rounded-lg text-base transition-all duration-300">
+            <div class="flex flex-wrap w-full h-full justify-around items-center mb-4 font-semibold text-lg bg-gray-200 p-2 rounded-t-lg">
                 <div class="flex justify-between w-full sm:w-1/2 mb-2 sm:mb-0">
                     <div class="w-16 text-center">I1</div>
                     <div class="w-16 text-center">I2</div>
@@ -364,36 +379,56 @@ const handleAlertUpdated = async () => {
             <div class="flex flex-wrap w-full h-full justify-around items-center space-y-2 sm:space-y-0">
                 <div class="flex justify-between w-full sm:w-1/2 mb-2 sm:mb-0 px-3">
                     <div class="flex items-center space-x-2 ml-4">
-                        <input type="checkbox" id="i1-status" :checked="alert_statuses[0] === '1'"
+                        <input
+                            type="checkbox"
+                            id="i1-status"
+                            :checked="alert_statuses[0] === '1'"
                             @change="alert_statuses[0] = alert_statuses[0] === '1' ? '0' : '1'"
-                            class="h-6 w-6 rounded-full appearance-none cursor-pointer transition-colors duration-300  hover:scale-110"
-                            :class="alert_statuses[0] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
+                            class="h-6 w-6 rounded-full appearance-none cursor-pointer transition-colors duration-300 hover:scale-110"
+                            :class="alert_statuses[0] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'"
+                        />
                     </div>
                     <div class="flex items-center space-x-2">
-                        <input type="checkbox" id="i2-status" :checked="alert_statuses[1] === '1'"
+                        <input
+                            type="checkbox"
+                            id="i2-status"
+                            :checked="alert_statuses[1] === '1'"
                             @change="alert_statuses[1] = alert_statuses[1] === '1' ? '0' : '1'"
                             class="h-6 w-6 rounded-full appearance-none cursor-pointer transition-colors duration-300 hover:scale-110"
-                            :class="alert_statuses[1] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
+                            :class="alert_statuses[1] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'"
+                        />
                     </div>
                     <div class="flex items-center space-x-2 pl-1">
-                        <input type="checkbox" id="i3-status" :checked="alert_statuses[2] === '1'"
+                        <input
+                            type="checkbox"
+                            id="i3-status"
+                            :checked="alert_statuses[2] === '1'"
                             @change="alert_statuses[2] = alert_statuses[2] === '1' ? '0' : '1'"
                             class="h-6 w-6 rounded-full appearance-none cursor-pointer transition-colors duration-300 hover:scale-110"
-                            :class="alert_statuses[2] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'" />
+                            :class="alert_statuses[2] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'"
+                        />
                     </div>
                     <div class="flex items-center space-x-2 pr-[0.4rem]">
-                        <input type="checkbox" id="i4-status" :checked="alert_statuses[3] === '1'"
+                        <input
+                            type="checkbox"
+                            id="i4-status"
+                            :checked="alert_statuses[3] === '1'"
                             @change="alert_statuses[3] = alert_statuses[3] === '1' ? '0' : '1'"
                             class="h-6 w-6 rounded-full appearance-none cursor-pointer transition-colors duration-300 hover:scale-110"
-                            :class="alert_statuses[3] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'">
+                            :class="alert_statuses[3] === '1' ? 'bg-green-500 border-green-500' : 'bg-red-500 border-red-500'"
+                        />
                     </div>
                 </div>
-                <input type="text"
+                <input
+                    type="text"
                     class="w-full sm:w-1/4 p-1 pl-2 bg-white border-2 border-gray-300 rounded-lg mt-2 sm:mt-0"
-                    v-model="alert_message" placeholder="Alert Message" />
+                    v-model="alert_message"
+                    placeholder="Alert Message"
+                />
                 <button
                     class="text-blue-500 border px-2 py-1 rounded-lg border-blue-500 transition-all duration-300 hover:bg-blue-500 hover:text-white mt-2 sm:mt-0"
-                    @click="addAlert">
+                    @click="addAlert"
+                >
                     Add Alert
                 </button>
             </div>
@@ -408,9 +443,14 @@ const handleAlertUpdated = async () => {
             <div class="overflow-y-scroll h-[15rem] mt-3">
                 <div v-for="(alert, index) in alerts" :key="alert.AlertID" class="flex flex-col">
                     <!-- <div class=""><hr class="py-2"></div> -->
-                    <Alert class="border-gray-200 border-t-[2px] py-3" :alert="alert" :editAlert="editAlertHandler"
-                        :removeAlert="removeAlert" @duplicate-alert="handleDuplicateAlert"
-                        @alert-updated="handleAlertUpdated" />
+                    <Alert
+                        class="border-gray-200 border-t-[2px] py-3"
+                        :alert="alert"
+                        :editAlert="editAlertHandler"
+                        :removeAlert="removeAlert"
+                        @duplicate-alert="handleDuplicateAlert"
+                        @alert-updated="handleAlertUpdated"
+                    />
                 </div>
             </div>
         </div>
@@ -432,15 +472,15 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-    border-color: #22C55E;
+    border-color: #22c55e;
 }
 
 input[type="checkbox"]:checked::after {
-    content: '';
+    content: "";
     width: 0.8rem;
     height: 0.8rem;
-    border: 2px solid #22C55E;
-    background-color: #22C55E;
+    border: 2px solid #22c55e;
+    background-color: #22c55e;
 
     input[type="checkbox"] {
         -webkit-appearance: none;
@@ -456,15 +496,15 @@ input[type="checkbox"]:checked::after {
     }
 
     input[type="checkbox"]:checked {
-        border-color: #22C55E;
+        border-color: #22c55e;
     }
 
     input[type="checkbox"]:checked::after {
-        content: '';
+        content: "";
         width: 0.8rem;
         height: 0.8rem;
-        border: 2px solid #22C55E;
-        background-color: #22C55E;
+        border: 2px solid #22c55e;
+        background-color: #22c55e;
         border-radius: 50%;
         position: absolute;
         top: 50%;
