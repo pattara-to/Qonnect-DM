@@ -114,10 +114,10 @@ watch(
 </script>
 
 <template>
-    <div class="modal block fixed  w-full h-full bg-black/70" @click="closeModalOnOutsideClick">
+    <div class="modal block fixed left-0 top-0 w-screen h-full bg-black/70 z-10" @click="closeModalOnOutsideClick">
         <transition name="slide">
             <div v-if="props.modalIsOpen"
-                class="modal-content p-6 rounded-lg shadow-lg bg-white fixed right-0 h-[93%] w-[80%] md:w-[25%] flex flex-col items-center overflow-auto transition-all duration-500"
+                class="modal-content p-6 rounded-lg shadow-lg bg-white fixed right-0 h-full w-[80%] md:w-[25%] flex flex-col items-center overflow-auto transition-all duration-500"
                 @click.stop>
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">Add Device</h2>
                 <div class="relative w-32 h-32 mb-4">
@@ -144,7 +144,7 @@ watch(
                             duplicateMacError
                                 ? 'border border-red-500 focus:border-red-500'
                                 : 'border border-gray-300 focus:border-blue-500'
-                        ]" maxlength="20" placeholder="Enter MAC Address" required />
+                            ]" maxlength="20" placeholder="XX:XX:XX:XX:XX:XX" pattern="^([0-9A-F]{2}([:])){5}([0-9A-F]{2})$" required/>
                         <p v-if="duplicateMacError" id="mac-error" class="text-red-500 text-sm mt-1">
                             This MAC address already exists. Please enter a unique MAC.
                         </p>

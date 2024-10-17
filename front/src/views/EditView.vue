@@ -255,7 +255,6 @@ const handleAlertUpdated = async () => {
 </script>
 
 <template>
-    <Navbar />
     <ConfirmModal :confirmMessage="confirmMessage" :toggleModal="toggleModal" v-show="isModalVisible" :isModalVisible="isModalVisible" @confirm="confirm"
         @cancel="cancel" />
 
@@ -305,7 +304,7 @@ const handleAlertUpdated = async () => {
                                 <label class="text-gray-600 block font-semibold mb-1">MAC Address</label>
                                 <input type="text" v-model="device.MAC"
                                     class="w-full rounded-md text-base h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    maxlength="20" placeholder="Enter MAC Address" />
+                                    maxlength="20" placeholder="Enter MAC Address" disabled/>
                             </div>
                         </div>
 
