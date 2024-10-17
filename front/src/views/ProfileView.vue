@@ -5,10 +5,9 @@ import { onMounted, reactive, ref } from "vue";
 import { useDeviceStore } from "@/stores/device";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import { useConfirm } from "@/stores/useConfirm.js";
-import defaultProfilePic from '@/assets/Ptony2.jpg';
+import defaultProfilePic from "@/assets/Ptony2.jpg";
 import { useRoute, useRouter, RouterLink } from "vue-router";
-const route = useRoute();
-const router = useRouter();
+import ResetPassModal from "@/components/ResetPassModal.vue";
 
 const { isModalVisible, confirmMessage, showConfirm, confirm, cancel } = useConfirm();
 
@@ -51,7 +50,6 @@ onMounted(async () => {
         }, 200);
     }
 });
-
 
 const ProfilePicChange = (event) => {
     const file = event.target.files[0];
@@ -127,12 +125,28 @@ const editLineToken = async () => {
         alert("Failed to update Line Token");
     }
 };
+
+const resetPassword = async () => {};
 </script>
 
 <template>
     <Navbar />
-    <ConfirmModal :toggleAlert="toggleAlert" :confirmMessage="confirmMessage" :isModalVisible="isModalVisible"
-        v-show="isModalVisible" @confirm="confirm" @cancel="cancel" />
+    <ResetPassModal
+        :toggleAlert="toggleAlert"
+        :confirmMessage="confirmMessage"
+        :isModalVisible="true"
+        v-show="true"
+        @confirm="confirm"
+        @cancel="cancel"
+    />
+    <ConfirmModal
+        :toggleAlert="toggleAlert"
+        :confirmMessage="confirmMessage"
+        :isModalVisible="isModalVisible"
+        v-show="isModalVisible"
+        @confirm="confirm"
+        @cancel="cancel"
+    />
 
     <div v-if="isLoading">
         <Loading />
@@ -141,21 +155,14 @@ const editLineToken = async () => {
     <div v-else class="flex flex-col h-[90%]">
         <div class="flex flex-wrap justify-between mt-4 mx-4 sm:mx-8">
             <span class="self-center text-base sm:text-lg ml-10 py-1">
-                <RouterLink class="hover:text-gray-500" :to="{ name: 'devices-view' }">
-                    Home
-                </RouterLink>
+                <RouterLink class="hover:text-gray-500" :to="{ name: 'devices-view' }"> Home </RouterLink>
                 >
-                <span class="bg-gray-200 text-violet-700 font-semibold rounded-lg m-1 px-2">
-                    My Account
-                </span>
+                <span class="bg-gray-200 text-violet-700 font-semibold rounded-lg m-1 px-2"> My Account </span>
             </span>
         </div>
-        <div
-            class="flex flex-col sm:mx-auto h-auto mt-2 justify-center w-full sm:w-3/4 md:w-1/2 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
+        <div class="flex flex-col sm:mx-auto h-auto mt-2 justify-center w-full sm:w-3/4 md:w-1/2 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
             <div>
-                <h2 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-700">
-                    My Account
-                </h2>
+                <h2 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-700">My Account</h2>
                 <hr class="mb-4 sm:mb-6" />
                 <div class="flex flex-col sm:flex-row items-center mb-4 sm:mb-6 space-y-4 sm:space-y-0 sm:space-x-8">
                     <div class="relative cursor-pointer" @click="triggerFileInput">
@@ -163,7 +170,8 @@ const editLineToken = async () => {
                             <img :src="profilePic" alt="Profile Picture" class="object-cover w-full h-full" />
                         </div>
                         <div
-                            class="absolute inset-0 flex items-center justify-center text-white text-xl bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity rounded-full">
+                            class="absolute inset-0 flex items-center justify-center text-white text-xl bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity rounded-full"
+                        >
                             <i class="bi bi-camera"></i>
                         </div>
                         <input ref="fileInput" type="file" accept="image/*" @change="ProfilePicChange" class="hidden" />
@@ -171,62 +179,87 @@ const editLineToken = async () => {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                         <div>
                             <label class="block font-semibold mb-1 text-gray-600">Username</label>
-                            <input type="text"
+                            <input
+                                type="text"
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.username" placeholder="Enter your username" maxlength="30" />
+                                v-model="user.username"
+                                placeholder="Enter your username"
+                                maxlength="30"
+                            />
                         </div>
                         <div>
                             <label class="block font-semibold mb-1 text-gray-600">Company</label>
-                            <input type="text"
+                            <input
+                                type="text"
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.company" placeholder="Enter your company" maxlength="30" />
+                                v-model="user.company"
+                                placeholder="Enter your company"
+                                maxlength="30"
+                            />
                         </div>
                         <div>
                             <label class="block font-semibold mb-1 text-gray-600">Email</label>
-                            <input type="email"
+                            <input
+                                type="email"
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.email" placeholder="Enter your email" maxlength="30" />
+                                v-model="user.email"
+                                placeholder="Enter your email"
+                                maxlength="30"
+                            />
                         </div>
                         <div>
                             <label class="block font-semibold mb-1 text-gray-600">Phone</label>
-                            <input type="tel"
+                            <input
+                                type="tel"
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.phone" placeholder="Enter your phone number" maxlength="15" />
+                                v-model="user.phone"
+                                placeholder="Enter your phone number"
+                                maxlength="15"
+                            />
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block font-semibold mb-1 text-gray-600">Address</label>
-                            <input type="text"
+                            <input
+                                type="text"
                                 class="w-full rounded-md text-sm h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.address" placeholder="Enter your address" maxlength="50" />
+                                v-model="user.address"
+                                placeholder="Enter your address"
+                                maxlength="50"
+                            />
                         </div>
                     </div>
                 </div>
                 <div class="flex justify-end">
                     <button
                         class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
-                        @click="editUser" aria-label="Edit User Information">
+                        @click="editUser"
+                        aria-label="Edit User Information"
+                    >
                         Save
                     </button>
                 </div>
             </div>
             <div class="mt-8">
-                <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-700">
-                    Notification
-                </h2>
+                <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-700">Notification</h2>
                 <hr class="mb-4" />
                 <div class="flex flex-col sm:flex-row items-center gap-4 mb-4">
                     <img src="../assets/LINE_logo.png" alt="Line" class="w-12 h-12 object-contain" />
                     <div class="flex-grow">
                         <label class="block font-semibold mb-1 text-gray-600">Line Token</label>
-                        <input type="text"
+                        <input
+                            type="text"
                             class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            v-model="user.lineToken" placeholder="Enter your Line token" />
+                            v-model="user.lineToken"
+                            placeholder="Enter your Line token"
+                        />
                     </div>
                 </div>
                 <div class="flex justify-end">
                     <button
                         class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
-                        @click="editLineToken" aria-label="Save Line Token">
+                        @click="editLineToken"
+                        aria-label="Save Line Token"
+                    >
                         Save
                     </button>
                 </div>

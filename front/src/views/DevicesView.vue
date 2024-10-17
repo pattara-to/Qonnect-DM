@@ -37,9 +37,9 @@ const addDevice = async (deviceData) => {
 <template>
     <Navbar />
     <AddModal v-show="modalIsOpen" :toggleModal="toggleModal" :addDevice="addDevice" :modalIsOpen="modalIsOpen" />
-    <Loading v-if="isLoading" />
+    <!-- <Loading v-if="isLoading" /> -->
 
-    <div v-else class="flex flex-col w-full px-12">
+    <div class="flex flex-col w-full px-12">
         <div class="flex flex-wrap justify-between items-center my-4">
             <h1 class="text-xl sm:text-2xl font-semibold text-gray-800">Devices</h1>
             <button @click="toggleModal" class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition shadow-md">
