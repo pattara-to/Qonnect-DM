@@ -37,47 +37,55 @@ const cancel = () => {
 
 <template>
     <transition name="fade">
-        <div v-if="isResetPassVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" @click.self="cancel">
-            <div
-                class="bg-white rounded-xl shadow-2xl transform transition-all sm:max-w-lg sm:w-full"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="modal-title"
-            >
-                <div class="flex justify-end pr-3">
-                    <button aria-label="Close" class="text-gray-400 hover:text-gray-600 transition-colors duration-200" @click="cancel">
-                        <i class="bi bi-x text-2xl"></i>
+        <div v-if="isResetPassVisible"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40" @click.self="cancel">
+            <div class="bg-white rounded-lg shadow-md sm:max-w-sm sm:w-full overflow-hidden" role="dialog"
+                aria-modal="true" aria-labelledby="modal-title">
+                <div class="flex justify-between items-center px-4 py-3 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-800" id="modal-title">
+                        Reset Password
+                    </h2>
+                    <button aria-label="Close" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        @click="cancel">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </button>
                 </div>
-                <div class="px-6 pb-6 text-center">
-                    <h2 class="mt-2 text-2xl leading-6 font-semibold text-gray-800" id="modal-title">
-                        {{ resetPassMessage }}
-                    </h2>
-                    <p class="mt-4 text-sm text-gray-500">Reset Password</p>
-
-                    <!-- Form inputs for password reset -->
-                    <div class="mt-4">
-                        <input type="password" placeholder="New password" v-model="password" class="w-full p-2 border rounded-md" />
+                <div class="px-4 py-5">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm mb-1">
+                                New Password
+                            </label>
+                            <input type="password" v-model="password" placeholder="Enter new password"
+                                class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400" />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm mb-1">
+                                Confirm Password
+                            </label>
+                            <input type="password" v-model="confirmPassword" placeholder="Confirm new password"
+                                class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400" />
+                        </div>
                     </div>
-                    <div class="mt-4">
-                        <input type="password" placeholder="Retype password" v-model="confirmPassword" class="w-full p-2 border rounded-md" />
-                    </div>
 
-                    <!-- Display error message if passwords do not match -->
-                    <p v-if="errorMessage" class="mt-2 text-sm text-red-500">{{ errorMessage }}</p>
+                    <p v-if="errorMessage" class="mt-4 text-sm text-red-500">
+                        {{ errorMessage }}
+                    </p>
 
-                    <div class="mt-6 flex justify-center space-x-4">
+                    <div class="mt-6 flex justify-end space-x-2">
                         <button
-                            class="px-6 py-2 bg-green-500 text-white rounded-md font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200"
-                            @click="reset"
-                        >
-                            Reset
+                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-300 transition"
+                            @click="cancel">
+                            Cancel
                         </button>
                         <button
-                            class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
-                            @click="cancel"
-                        >
-                            Cancel
+                            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+                            @click="reset">
+                            Reset
                         </button>
                     </div>
                 </div>

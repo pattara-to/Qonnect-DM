@@ -22,7 +22,7 @@ const secret = "ptonyisreal";
 const pool = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "TestOne",
+    password: "12345678",
     database: "device_manager",
     waitForConnections: true,
     connectionLimit: 10, // Number of connections in the pool

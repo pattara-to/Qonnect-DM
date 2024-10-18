@@ -1,6 +1,6 @@
 <template>
   <div class="loading-container flex items-center justify-center">
-    <div class="loading-card flex flex-col items-center justify-center p-6 rounded-xl shadow-xl bg-blue-600">
+    <div class="loading-card flex flex-col items-center justify-center rounded-xl shadow-xl bg-blue-600">
       <div class="spinner-border"></div>
       <p class="mt-4 text-lg font-semibold text-white">Loading, please wait...</p>
     </div>
