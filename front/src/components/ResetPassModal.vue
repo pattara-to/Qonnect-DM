@@ -78,14 +78,14 @@ const cancel = () => {
 
                     <div class="mt-6 flex justify-end space-x-2">
                         <button
+                            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
+                            @click="reset">
+                            Reset
+                        </button>
+                        <button
                             class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-300 transition"
                             @click="cancel">
                             Cancel
-                        </button>
-                        <button
-                            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-400 transition"
-                            @click="reset">
-                            Reset
                         </button>
                     </div>
                 </div>

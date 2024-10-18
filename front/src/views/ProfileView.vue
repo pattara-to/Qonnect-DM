@@ -147,7 +147,7 @@ const resetPassword = async () => {
                 <span class="bg-gray-200 text-violet-700 font-semibold rounded-lg m-1 px-2"> Setting </span>
             </span>
         </div>
-        <div class="flex flex-col sm:mx-auto h-auto mt-2 justify-center w-full sm:w-3/4 md:w-1/2 p-4 sm:p-6 ">
+        <div class="flex flex-col sm:mx-auto h-auto mt-2 justify-center  sm:w-3/4 md:w-4/5 p-4 sm:p-6 ">
             <div>
                 <h2 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-700">My Account</h2>
                 <hr class="mb-4 sm:mb-6" />
@@ -187,7 +187,7 @@ const resetPassword = async () => {
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 v-model="user.phone" placeholder="Enter your phone number" maxlength="15" />
                         </div>
-                        <div class="sm:col-span-2">
+                        <div >
                             <label class="block font-semibold mb-1 text-gray-600">Password</label>
                             <button
                                 class="bg-red-500 w-full text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-300 shadow-md"

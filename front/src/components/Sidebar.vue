@@ -29,8 +29,8 @@ const menuItems = [
     iconFill: HomeFill,
   },
   {
-    name: 'Profile',
-    path: '/profile',
+    name: 'Setting',
+    path: '/setting',
     iconLine: SettingLine,
     iconFill: SettingFill,
   },
