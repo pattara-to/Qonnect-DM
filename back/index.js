@@ -115,6 +115,24 @@ app.post("/edit-linetoken", async (req, res) => {
     }
 });
 
+app.post("/reset-password", async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+        const { pass } = req.body;
+        const user = isLogin(req);
+        if (!user) {
+            throw { message: "Auth Fail" };
+        }
+        const hash = await bcrypt.hash(pass, 10);
+        await conn.query("UPDATE users SET Password = ? WHERE ID = ?", [hash, user.userID]);
+        conn.release();
+        res.status(200).send({ message: "Password updated successfully" }); // Respond with success
+    } catch (error) {
+        console.log("error", error);
+        res.status(500).send({ message: "An error occurred" }); // Handle any errors
+    }
+});
+
 app.get("/devices", async (req, res) => {
     const conn = await pool.getConnection();
     try {

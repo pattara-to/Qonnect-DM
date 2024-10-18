@@ -2,12 +2,11 @@
 import { ref, watch } from "vue";
 
 const props = defineProps({
-    toggleAlert: Function,
-    confirmMessage: String,
-    isModalVisible: Boolean,
+    resetPassMessage: String,
+    isResetPassVisible: Boolean,
 });
 
-const emit = defineEmits(["confirm", "cancel"]);
+const emit = defineEmits(["resetPass", "cancel"]);
 
 // Reactive states for password inputs
 const password = ref("");
@@ -15,7 +14,7 @@ const confirmPassword = ref("");
 const errorMessage = ref("");
 
 // Form validation and event handling
-const confirm = () => {
+const reset = () => {
     if (password.value !== confirmPassword.value) {
         errorMessage.value = "Passwords do not match";
         return;
@@ -24,17 +23,21 @@ const confirm = () => {
         errorMessage.value = "Please enter both passwords";
         return;
     }
-    emit("confirm", password.value); // Pass the password along with the event
+    emit("resetPass", password.value); // Pass the password along with the event
+    password.value = "";
+    confirmPassword.value = "";
 };
 
 const cancel = () => {
     emit("cancel");
+    password.value = "";
+    confirmPassword.value = "";
 };
 </script>
 
 <template>
     <transition name="fade">
-        <div v-if="isModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" @click.self="cancel">
+        <div v-if="isResetPassVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" @click.self="cancel">
             <div
                 class="bg-white rounded-xl shadow-2xl transform transition-all sm:max-w-lg sm:w-full"
                 role="dialog"
@@ -48,7 +51,7 @@ const cancel = () => {
                 </div>
                 <div class="px-6 pb-6 text-center">
                     <h2 class="mt-2 text-2xl leading-6 font-semibold text-gray-800" id="modal-title">
-                        {{ confirmMessage }}
+                        {{ resetPassMessage }}
                     </h2>
                     <p class="mt-4 text-sm text-gray-500">Reset Password</p>
 
@@ -66,9 +69,9 @@ const cancel = () => {
                     <div class="mt-6 flex justify-center space-x-4">
                         <button
                             class="px-6 py-2 bg-green-500 text-white rounded-md font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200"
-                            @click="confirm"
+                            @click="reset"
                         >
-                            Confirm
+                            Reset
                         </button>
                         <button
                             class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"

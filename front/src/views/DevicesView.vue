@@ -34,7 +34,6 @@ const addDevice = async (deviceData) => {
 };
 </script>
 <template>
-    <Navbar />
     <AddModal v-show="modalIsOpen" :toggleModal="toggleModal" :addDevice="addDevice" :modalIsOpen="modalIsOpen" />
     <Loading v-if="isLoading" />
 

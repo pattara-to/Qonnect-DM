@@ -175,5 +175,25 @@ export const useDeviceStore = defineStore("device", {
                 }
             }
         },
+        async resetPassword(pass) {
+            try {
+                const authToken = localStorage.getItem("token");
+                const response = await axios.post(
+                    `${BASE_URL}/reset-password`,
+                    { pass },
+                    {
+                        headers: {
+                            authorization: `Bearer ${authToken}`,
+                        },
+                    }
+                );
+                console.log("done");
+            } catch (error) {
+                console.log("Error in editLineToken:", error);
+                if (error.response && error.response.status === 401) {
+                    window.location.replace("http://localhost:5173/login");
+                }
+            }
+        },
     },
 });

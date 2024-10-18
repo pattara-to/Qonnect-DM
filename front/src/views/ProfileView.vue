@@ -1,5 +1,4 @@
 <script setup>
-import Navbar from "@/components/Navbar.vue";
 import Loading from "@/components/Loading.vue";
 import { onMounted, reactive, ref } from "vue";
 import { useDeviceStore } from "@/stores/device";
@@ -8,8 +7,10 @@ import { useConfirm } from "@/stores/useConfirm.js";
 import defaultProfilePic from "@/assets/Ptony2.jpg";
 import { useRoute, useRouter, RouterLink } from "vue-router";
 import ResetPassModal from "@/components/ResetPassModal.vue";
+import { useResetPass } from "@/stores/useResetPass";
 
-const { isModalVisible, isPasswordVisible, confirmMessage, showConfirm, showPassword, confirm, cancel } = useConfirm();
+const { isModalVisible, confirmMessage, showConfirm, confirm, cancel } = useConfirm();
+const { isResetPassVisible, resetPassMessage, showResetPass, resetPass, cancelResetPass } = useResetPass();
 
 const deviceStore = useDeviceStore();
 
@@ -114,48 +115,29 @@ const editSetting = async () => {
     }
 };
 
-const editLineToken = async () => {
-    try {
-        const confirmed = await showConfirm("Edit Line Token?");
-        if (confirmed) {
-            await deviceStore.editLineToken(user);
-            alert("Line Token updated successfully.");
-        }
-    } catch (error) {
-        alert("Failed to update Line Token");
-    }
-};
-
 const resetPassword = async () => {
     try {
-        const confirmed = await showPassword("Pass?");
+        const [confirmed, pass] = await showResetPass("Reset Password");
         if (confirmed) {
-            await deviceStore.editLineToken(user);
-            alert("reset pass.");
+            await deviceStore.resetPassword(pass);
+            console.log("Password reset successfully");
+            alert("Reset password successfully");
         }
     } catch (error) {
-        alert("no");
+        alert("Failed to reset password");
     }
 };
 </script>
 
 <template>
     <ResetPassModal
-        :toggleAlert="toggleAlert"
-        :confirmMessage="confirmMessage"
-        :isModalVisible="isPasswordVisible"
-        v-show="isPasswordVisible"
-        @confirm="confirm"
-        @cancel="cancel"
+        :resetPassMessage="resetPassMessage"
+        :isResetPassVisible="isResetPassVisible"
+        v-show="isResetPassVisible"
+        @resetPass="resetPass"
+        @cancel="cancelResetPass"
     />
-    <ConfirmModal
-        :toggleAlert="toggleAlert"
-        :confirmMessage="confirmMessage"
-        :isModalVisible="isModalVisible"
-        v-show="isModalVisible"
-        @confirm="confirm"
-        @cancel="cancel"
-    />
+    <ConfirmModal :confirmMessage="confirmMessage" :isModalVisible="isModalVisible" v-show="isModalVisible" @confirm="confirm" @cancel="cancel" />
 
     <div v-if="isLoading">
         <Loading />
@@ -256,7 +238,7 @@ const resetPassword = async () => {
                 <div class="flex justify-end">
                     <button
                         class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
-                        @click="editLineToken, editSetting"
+                        @click="editSetting"
                         aria-label="Save Line Token"
                     >
                         Save
