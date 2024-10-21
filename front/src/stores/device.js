@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-const BASE_URL = "http://127.0.0.1:8081";
+const BASE_URL = "https://devices-manager.qonnect-apps.com/api";
+const FRONT = "https://devices-manager.qonnect-apps.com/login"
 
 export const useDeviceStore = defineStore("device", {
     state: () => ({
@@ -22,7 +23,7 @@ export const useDeviceStore = defineStore("device", {
             } catch (error) {
                 console.log("error", error);
                 if (error.response.status == 401) {
-                    window.location.replace("http://localhost:5173/login");
+                    window.location.replace(`${FRONT}`);
                 }
             }
         },
@@ -38,7 +39,7 @@ export const useDeviceStore = defineStore("device", {
             } catch (error) {
                 console.log("error", error);
                 if (error.response.status == 401) {
-                    window.location.replace("http://localhost:5173/login");
+                    window.location.replace(`${FRONT}`);
                 }
             }
         },
@@ -140,7 +141,7 @@ export const useDeviceStore = defineStore("device", {
             } catch (error) {
                 console.log("error", error);
                 if (error.response.status == 401) {
-                    window.location.replace("http://localhost:5173/login");
+                    window.location.replace(`${FRONT}`);
                 }
             }
         },
@@ -156,7 +157,7 @@ export const useDeviceStore = defineStore("device", {
             } catch (error) {
                 console.log("Error in editUser:", error);
                 if (error.response && error.response.status === 401) {
-                    window.location.replace("http://localhost:5173/login");
+                    window.location.replace(`${FRONT}`);
                 }
             }
         },
@@ -171,7 +172,7 @@ export const useDeviceStore = defineStore("device", {
             } catch (error) {
                 console.log("Error in editLineToken:", error);
                 if (error.response && error.response.status === 401) {
-                    window.location.replace("http://localhost:5173/login");
+                    window.location.replace(`${FRONT}`);
                 }
             }
         },
@@ -191,7 +192,7 @@ export const useDeviceStore = defineStore("device", {
             } catch (error) {
                 console.log("Error in editLineToken:", error);
                 if (error.response && error.response.status === 401) {
-                    window.location.replace("http://localhost:5173/login");
+                    window.location.replace(`${FRONT}`);
                 }
             }
         },
