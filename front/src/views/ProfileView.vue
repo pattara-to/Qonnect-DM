@@ -4,7 +4,7 @@ import { onMounted, reactive, ref } from "vue";
 import { useDeviceStore } from "@/stores/device";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import { useConfirm } from "@/stores/useConfirm.js";
-import defaultProfilePic from "@/assets/Ptony2.jpg";
+import defaultProfilePic from "@/assets/user.jpg";
 import { useRoute, useRouter, RouterLink } from "vue-router";
 import ResetPassModal from "@/components/ResetPassModal.vue";
 import { useResetPass } from "@/stores/useResetPass";
