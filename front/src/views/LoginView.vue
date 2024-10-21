@@ -13,6 +13,7 @@ const userData = reactive({
 
 const loginError = ref("");
 
+localStorage.removeItem("token")
 const login = async () => {
     loginError.value = "";
     if (userData.email === "" || userData.password === "") {

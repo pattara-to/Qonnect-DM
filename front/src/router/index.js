@@ -14,8 +14,8 @@ const router = createRouter({
             component: DevicesView,
         },
         {
-            path: "/profile",
-            name: "profile-view",
+            path: "/setting",
+            name: "setting-view",
             component: ProfileView,
         },
         {

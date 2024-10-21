@@ -18,39 +18,46 @@ const cancel = () => {
 
 <template>
     <transition name="fade">
-        <div v-if="props.isModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div class="bg-white rounded-xl shadow-2xl transform transition-all sm:max-w-lg sm:w-full" role="dialog"
-                aria-modal="true" aria-labelledby="modal-title">
-                <div class="flex justify-end pr-3">
-                    <button aria-label="Close" class="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+        <div v-if="isModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+            @click.self="cancel">
+            <div class="bg-white rounded-lg shadow-md w-11/12 max-w-md p-6" role="dialog" aria-modal="true"
+                aria-labelledby="modal-title">
+                <div class="flex justify-end">
+                    <button aria-label="Close" class="text-gray-500 hover:text-gray-700 focus:outline-none"
                         @click="cancel">
-                        <i class="bi bi-x text-2xl"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </button>
                 </div>
-                <div class="h-20 text-[5rem] text-red-500 items-center" :aria-label="Close">
-                    <!-- <i class="block bi bi-exclamation-triangle"></i> -->
-                    <img src="../assets/alert_icon.svg" class="block h-full items-center mx-auto" />
-                </div>
-                <div class="px-6 pb-6 text-center">
 
-                    <h2 class="mt-2 text-2xl leading-6 font-semibold text-gray-800" id="modal-title">
-                        {{ props.confirmMessage }}
-                    </h2>
-                    <p class="mt-4 text-sm text-gray-500">
-                        Are you sure you want to proceed? This action cannot be undone.
-                    </p>
-                    <div class="mt-6 flex justify-center space-x-4">
-                        <button
-                            class="px-6 py-2 bg-green-500 text-white rounded-md font-medium hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200"
-                            @click="confirm">
-                            Confirm
-                        </button>
-                        <button
-                            class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
-                            @click="cancel">
-                            Cancel
-                        </button>
-                    </div>
+                <div class="flex justify-center mb-4">
+                    <img src="../assets/alert_icon.svg" alt="Alert Icon" class="h-12 w-12" />
+                </div>
+
+
+                <h2 class="text-xl font-semibold text-gray-800 text-center mb-2" id="modal-title">
+                    {{ confirmMessage }}
+                </h2>
+
+
+                <p class="text-gray-600 text-center mb-6">
+                    Are you sure you want to proceed?
+                </p>
+
+                <div class="flex justify-center space-x-4">
+                    <button
+                        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+                        @click="confirm">
+                        Confirm
+                    </button>
+                    <button
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+                        @click="cancel">
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>
@@ -58,11 +65,13 @@ const cancel = () => {
 </template>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
     transition: opacity 0.2s ease;
 }
 
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
     opacity: 0;
 }
 

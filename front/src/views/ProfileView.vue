@@ -1,16 +1,16 @@
 <script setup>
-import Navbar from "@/components/Navbar.vue";
 import Loading from "@/components/Loading.vue";
 import { onMounted, reactive, ref } from "vue";
 import { useDeviceStore } from "@/stores/device";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import { useConfirm } from "@/stores/useConfirm.js";
-import defaultProfilePic from '@/assets/Ptony2.jpg';
+import defaultProfilePic from "@/assets/user.jpg";
 import { useRoute, useRouter, RouterLink } from "vue-router";
-const route = useRoute();
-const router = useRouter();
+import ResetPassModal from "@/components/ResetPassModal.vue";
+import { useResetPass } from "@/stores/useResetPass";
 
 const { isModalVisible, confirmMessage, showConfirm, confirm, cancel } = useConfirm();
+const { isResetPassVisible, resetPassMessage, showResetPass, resetPass, cancelResetPass } = useResetPass();
 
 const deviceStore = useDeviceStore();
 
@@ -51,7 +51,6 @@ onMounted(async () => {
         }, 200);
     }
 });
-
 
 const ProfilePicChange = (event) => {
     const file = event.target.files[0];
@@ -104,11 +103,11 @@ const triggerFileInput = () => {
     fileInput.value.click();
 };
 
-const editUser = async () => {
+const editSetting = async () => {
     try {
-        const confirmed = await showConfirm("Edit User information?");
+        const confirmed = await showConfirm("Edit Setting");
         if (confirmed) {
-            console.log("Sending user data:", user);
+            await deviceStore.editLineToken(user);
             await deviceStore.editUser(user);
         }
     } catch (error) {
@@ -116,46 +115,41 @@ const editUser = async () => {
     }
 };
 
-const editLineToken = async () => {
+const resetPassword = async () => {
     try {
-        const confirmed = await showConfirm("Edit Line Token?");
+        const [confirmed, pass] = await showResetPass("Reset Password");
         if (confirmed) {
-            await deviceStore.editLineToken(user);
-            alert("Line Token updated successfully.");
+            await deviceStore.resetPassword(pass);
+            console.log("Password reset successfully");
+            alert("Reset password successfully");
         }
     } catch (error) {
-        alert("Failed to update Line Token");
+        alert("Failed to reset password");
     }
 };
 </script>
 
 <template>
-    <Navbar />
-    <ConfirmModal :toggleAlert="toggleAlert" :confirmMessage="confirmMessage" :isModalVisible="isModalVisible"
-        v-show="isModalVisible" @confirm="confirm" @cancel="cancel" />
+    <ResetPassModal :resetPassMessage="resetPassMessage" :isResetPassVisible="isResetPassVisible"
+        v-show="isResetPassVisible" @resetPass="resetPass" @cancel="cancelResetPass" />
+    <ConfirmModal :confirmMessage="confirmMessage" :isModalVisible="isModalVisible" v-show="isModalVisible"
+        @confirm="confirm" @cancel="cancel" />
 
     <div v-if="isLoading">
         <Loading />
     </div>
 
-    <div v-else class="flex flex-col h-[90%]">
-        <div class="flex flex-wrap justify-between mt-4 mx-4 sm:mx-8">
+    <div v-else class="flex flex-col w-full">
+        <div class="flex flex-wrap justify-between mt-4">
             <span class="self-center text-base sm:text-lg ml-10 py-1">
-                <RouterLink class="hover:text-gray-500" :to="{ name: 'devices-view' }">
-                    Home
-                </RouterLink>
+                <RouterLink class="hover:text-gray-500" :to="{ name: 'devices-view' }"> Home </RouterLink>
                 >
-                <span class="bg-gray-200 text-violet-700 font-semibold rounded-lg m-1 px-2">
-                    My Account
-                </span>
+                <span class="bg-gray-200 text-violet-700 font-semibold rounded-lg m-1 px-2"> Setting </span>
             </span>
         </div>
-        <div
-            class="flex flex-col sm:mx-auto h-auto mt-2 justify-center w-full sm:w-3/4 md:w-1/2 p-4 sm:p-6 bg-white rounded-lg shadow-lg">
+        <div class="flex flex-col sm:mx-auto h-auto mt-2 justify-center  sm:w-3/4 md:w-4/5 p-4 sm:p-6 ">
             <div>
-                <h2 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-700">
-                    My Account
-                </h2>
+                <h2 class="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-700">My Account</h2>
                 <hr class="mb-4 sm:mb-6" />
                 <div class="flex flex-col sm:flex-row items-center mb-4 sm:mb-6 space-y-4 sm:space-y-0 sm:space-x-8">
                     <div class="relative cursor-pointer" @click="triggerFileInput">
@@ -193,40 +187,36 @@ const editLineToken = async () => {
                                 class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 v-model="user.phone" placeholder="Enter your phone number" maxlength="15" />
                         </div>
-                        <div class="sm:col-span-2">
-                            <label class="block font-semibold mb-1 text-gray-600">Address</label>
-                            <input type="text"
-                                class="w-full rounded-md text-sm h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                v-model="user.address" placeholder="Enter your address" maxlength="50" />
+                        <div >
+                            <label class="block font-semibold mb-1 text-gray-600">Password</label>
+                            <button
+                                class="bg-red-500 w-full text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-300 shadow-md"
+                                @click="resetPassword">
+                                Reset Password
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end">
-                    <button
-                        class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
-                        @click="editUser" aria-label="Edit User Information">
-                        Save
-                    </button>
-                </div>
             </div>
             <div class="mt-8">
-                <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-700">
-                    Notification
-                </h2>
+                <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-700">Notification</h2>
                 <hr class="mb-4" />
-                <div class="flex flex-col sm:flex-row items-center gap-4 mb-4">
-                    <img src="../assets/LINE_logo.png" alt="Line" class="w-12 h-12 object-contain" />
-                    <div class="flex-grow">
+                <div class="flex flex-col sm:flex-row items-center gap-4 mb-4 w-full">
+                    <div class="flex-shrink-0">
+                        <img src="../assets/LINE_logo.png" alt="Line" class="w-12 h-12 object-contain" />
+                    </div>
+                    <div class="flex-grow w-full">
                         <label class="block font-semibold mb-1 text-gray-600">Line Token</label>
                         <input type="text"
                             class="w-full rounded-md h-10 bg-gray-100 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             v-model="user.lineToken" placeholder="Enter your Line token" />
                     </div>
                 </div>
+
                 <div class="flex justify-end">
                     <button
                         class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300 shadow-md"
-                        @click="editLineToken" aria-label="Save Line Token">
+                        @click="editSetting" aria-label="Save Line Token">
                         Save
                     </button>
                 </div>

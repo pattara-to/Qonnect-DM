@@ -3,7 +3,6 @@ import { onMounted, ref } from "vue";
 import Machine from "@/components/Machine.vue";
 import { useDeviceStore } from "@/stores/device";
 import AddModal from "@/components/AddModal.vue";
-import Navbar from "@/components/Navbar.vue";
 import Loading from "@/components/Loading.vue";
 
 const deviceStore = useDeviceStore();
@@ -35,7 +34,6 @@ const addDevice = async (deviceData) => {
 };
 </script>
 <template>
-    <Navbar />
     <AddModal v-show="modalIsOpen" :toggleModal="toggleModal" :addDevice="addDevice" :modalIsOpen="modalIsOpen" />
     <Loading v-if="isLoading" />
 
@@ -46,9 +44,7 @@ const addDevice = async (deviceData) => {
                 + Add Device
             </button>
         </div>
-        <div
-            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 min-[1920px]:grid-cols-8 gap-2 sm:gap-4 mb-4"
-        >
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 min-[1920px]:grid-cols-8 gap-2 sm:gap-4 mb-4">
             <Machine v-for="device in deviceStore.list" :key="device.id" :device="device" />
         </div>
     </div>
