@@ -1,0 +1,84 @@
+<script setup>
+import { onMounted, ref, watch } from "vue";
+import { RouterLink } from "vue-router";
+import defaultMachinePic from "@/assets/machine.png";
+
+const backend = "http://localhost:8081/uploads/";
+const status = ref(0);
+
+const props = defineProps({
+    device: Object,
+});
+
+const machinePic = ref(defaultMachinePic);
+
+onMounted(() => {
+    if (props.device?.io_status !== undefined) {
+        status.value = props.device.io_status;
+    }
+    if (props.device?.image) {
+        machinePic.value = props.device.image;
+    } else {
+        machinePic.value = defaultMachinePic;
+    }
+});
+
+watch(
+    () => props.device,
+    (newDevice) => {
+        if (newDevice?.io_status !== undefined) {
+            status.value = newDevice.io_status;
+        }
+        if (newDevice?.image) {
+            machinePic.value = props.device.image;
+        } else {
+            machinePic.value = defaultMachinePic;
+        }
+    }
+);
+</script>
+
+<template>
+    <RouterLink :to="{ name: 'edit-view', params: { id: device.id } }">
+        <div class="flex flex-col items-center text-center shadow-lg bg-white rounded-lg hover:scale-105 duration-300">
+            <div class="w-full py-1.5 rounded-t-lg text-white text-lg font-semibold" :class="device.status ? 'bg-green-500' : 'bg-red-500'">
+                <span>{{ device.status ? "Connected" : "Disconnected" }}</span>
+            </div>
+
+            <div class="flex mt-3 w-1/2">
+                <!-- <i class="bi bi-geo-alt-fill text-red-500"></i> -->
+                <img src="../assets/location_icon.svg" />
+                <p class="text-gray-500 font-medium text-base truncate rounded-lg px-1 mx-1 w-4/5">
+                    {{ device.location }}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <img :src="machinePic" alt="machine" class="w-20 h-20 rounded-md object-cover" />
+            </div>
+
+            <h1 class="mt-3 text-lg truncate font-semibold w-3/4">{{ device.name }}</h1>
+            <p class="text-gray-400 text-xs">{{ device.mac }}</p>
+
+            <div class="flex justify-between w-full px-8 mt-3 pb-5">
+                <div v-for="(s, index) in status" :key="index" class="flex flex-col items-center space-y-1">
+                    <div class="w-5 h-5 rounded-full" :class="s == '1' ? 'bg-green-500' : 'bg-red-500'"></div>
+                    <span class="text-sm font-bold">I{{ index + 1 }}</span>
+                </div>
+            </div>
+        </div>
+    </RouterLink>
+</template>
+
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+    transition: width 0.5s ease, opacity 0.5s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+    width: 0;
+    opacity: 0;
+}
+</style>
